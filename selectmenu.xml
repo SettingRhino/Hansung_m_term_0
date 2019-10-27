@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="bottom|center_horizontal"
+        android:textColor="#808000"
         android:text="이름없음"
         android:textSize="45sp" />
 

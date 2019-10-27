@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".Chatting_Main">
         </activity>
+        <activity android:name=".Board_0">
+        </activity>
     </application>
 
 </manifest>
