@@ -24,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
+        //테스트용
+        tmpUser=new UserInfo("root","root");
+
+    }
+    protected void init(){
         tx_id_Info=findViewById(R.id.tx_id_Info);
         tx_pw_Info=findViewById(R.id.tx_pw_Info);
         bt_Login=findViewById(R.id.bt_Login);
@@ -32,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
         bt_Login.setOnClickListener(Listen_Login);
         bt_Wcome.setOnClickListener(Listen_Wellcome);
         bt_Pwch.setOnClickListener(Listen_Pwchange);
-        //테스트용
-        tmpUser=new UserInfo("root","root");
-
     }
     View.OnClickListener Listen_Pwchange=new View.OnClickListener() {
         @Override

@@ -5,7 +5,7 @@
     android:background="#e6ffe6">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/appName1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -28,8 +28,8 @@
             android:layout_marginRight="30dp"
             android:layout_marginBottom="30dp"
             android:background="#cce6ff"
-            android:textSize="40dp"
-            android:text="게시글" />
+            android:text="게시판"
+            android:textSize="40dp" />
     </LinearLayout>
 
     <LinearLayout
