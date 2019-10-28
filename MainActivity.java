@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         tx_id_Info=findViewById(R.id.tx_id_Info);
         tx_pw_Info=findViewById(R.id.tx_pw_Info);
         bt_Login=findViewById(R.id.bt_Login);
+        //bt_Login=findViewById(R.id.bt_Login);
         bt_Wcome=findViewById(R.id.bt_Wcome);
         bt_Pwch=findViewById(R.id.bt_Pwch);
         bt_Login.setOnClickListener(Listen_Login);

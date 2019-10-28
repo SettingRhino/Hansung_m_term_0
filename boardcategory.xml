@@ -18,40 +18,48 @@
                 android:id="@+id/tx_boardcategory00"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="게시판1" />
+                android:gravity="center_horizontal|center_vertical"
+                android:text="게시판0테스트용 클릭"
+                android:textColor="#808000"
+                android:textSize="40sp" />
 
             <TextView
                 android:id="@+id/tx_boardcategory01"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="게시판2" />
+                android:text="게시판1" />
 
             <TextView
                 android:id="@+id/tx_boardcategory02"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="게시판3" />
+                android:text="게시판2" />
 
             <TextView
                 android:id="@+id/tx_boardcategory03"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="게시판4" />
+                android:text="게시판3" />
 
             <TextView
                 android:id="@+id/tx_boardcategory04"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="게시판5" />
+                android:text="게시판54" />
 
             <TextView
                 android:id="@+id/tx_boardcategory05"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="게시판6" />
+                android:text="게시판5" />
 
             <TextView
                 android:id="@+id/tx_boardcategory06"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="게시판6" />
+            <TextView
+                android:id="@+id/tx_boardcategory07"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:text="게시판7" />
