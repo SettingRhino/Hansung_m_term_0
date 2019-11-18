@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import seven.hansung.nonamed.utility.Board_post;
 import seven.hansung.nonamed.utility.Spinnercreat;
@@ -33,10 +35,11 @@ import seven.hansung.nonamed.utility.Spinnercreat;
 public class Board_0 extends AppCompatActivity {
     //파이어베이스 참조객체 필요한것?-> board->해당 카테고리.
     DatabaseReference board_categoryreq;
+    public static int PAGENUM=1;
+    public static int PAGEMAXNUM=1;
     public enum PageMove {
         PRE5, PRE, NEXT, NEXT5
     }
-    static int pageflag=0;
     //동적액티비티를 위한 리스트
     protected ArrayList<LinearLayout> postcontainerlist;
     protected ArrayList<TextView> postnolist;
@@ -61,14 +64,11 @@ public class Board_0 extends AppCompatActivity {
 
     String categoryname;
     Boolean postOK = false;
-    int postcount;
     ImageButton nextpagebtn;
     ImageButton prepagebtn;
     ImageButton next5pagebtn;
     ImageButton pre5pagebtn;
     TextView pagenavi;
-    int totalpage;
-    int curpage;
     Intent intent;
 
 
@@ -102,7 +102,8 @@ public class Board_0 extends AppCompatActivity {
 
         //board-category 참조 가져옴
         board_categoryreq = FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
-        board_categoryreq.addListenerForSingleValueEvent(getpostlist);
+        board_categoryreq.addValueEventListener(getpostlistten);
+        //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
         //글쓰기 후 다시 돌아올경우.
         if (intent.getBooleanExtra("postOK", postOK)) {
             Toast.makeText(this, "글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
@@ -127,20 +128,268 @@ public class Board_0 extends AppCompatActivity {
         //creatactive();
         //Toast.makeText(getApplicationContext(),boardnumlist.get(0),Toast.LENGTH_SHORT).show();
         //검색기능
-        spinnercraet = new Spinnercreat();
-        spinner = findViewById(R.id.board_search_spinner);
-        spinner.setAdapter(spinerAdapter);
-        spinner.setOnItemSelectedListener(Spinner_select);
-        bt_post_search.setOnClickListener(listen_post_search);
-        spinerAdapter = spinnercraet.creatAdapter(spinerAdapter, R.array.board_search_spinner, this);
+
     //페이지 이동
         nextpagebtn.setOnClickListener(pagemovebtnlisten);
         next5pagebtn.setOnClickListener(pagemovebtnlisten);
         prepagebtn.setOnClickListener(pagemovebtnlisten);
         pre5pagebtn.setOnClickListener(pagemovebtnlisten);
     }
-    //이하 리스너 혹은 다른 함수
 
+    //이하 리스너 혹은 다른 함수
+    void creatview(ArrayList<Board_post> postlist){
+        postcontainerlist = new ArrayList<LinearLayout>();
+        postnolist = new ArrayList<TextView>();
+        posttitlelist = new ArrayList<TextView>();
+        postownerlist = new ArrayList<TextView>();
+        for (int i = 0; i < 10; i++) {
+            postcontainer = findViewById(R.id.post0 + i);
+            postcontainer.removeAllViews();
+            //글번호
+            postno = new TextView(this);
+
+            postno.setTextSize(15);
+            postno.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            postno.setLayoutParams(postnoparam);
+            //글제목
+            posttitle = new TextView(this);
+
+            posttitle.setTextSize(15);
+            posttitle.setLayoutParams(posttitleparam);
+            //글작성자
+            postowner = new TextView(this);
+            postowner.setGravity(View.TEXT_ALIGNMENT_VIEW_END);
+            postowner.setLayoutParams(postownerparam);
+
+                if(postlist.get(i)!=null) {
+                    postno.setText(postlist.get(i).getPostnum());
+                    posttitle.setText(postlist.get(i).getPosttitle());
+                    postowner.setText(postlist.get(i).getPostowner());
+                }
+                else{
+                    postno.setText("");
+                    posttitle.setText("");
+                    postowner.setText("");
+                }
+
+
+            //
+            //컨테이너 추가부분.
+            postcontainer.addView(postno);
+            postcontainer.addView(posttitle);
+            postcontainer.addView(postowner);
+            postcontainer.setOnClickListener(listen_post);
+
+            postnolist.add(postno);
+            posttitlelist.add(posttitle);
+            postownerlist.add(postowner);
+            postcontainerlist.add(postcontainer);
+        }
+        pagenavi.setTextSize(20);
+        pagenavi.setText(PAGENUM+" OF "+PAGEMAXNUM);
+        spinner = findViewById(R.id.board_search_spinner);
+        spinnercraet = new Spinnercreat();
+        spinerAdapter = spinnercraet.creatAdapter(spinerAdapter, R.array.board_search_spinner, this);
+        spinner.setAdapter(spinerAdapter);
+        spinner.setOnItemSelectedListener(Spinner_select);
+        bt_post_search.setOnClickListener(listen_post_search);
+
+    }
+
+    //다음페이지
+    View.OnClickListener pagemovebtnlisten=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //버튼마다 할일은 PAGENUM을 조절할뿐.
+            if(v.equals(nextpagebtn)){
+
+                if(PAGENUM<PAGEMAXNUM)
+                    PAGENUM=PAGENUM+1;
+                else{
+                    PAGENUM=PAGEMAXNUM;
+                }
+                //pageflag=1;
+                //board_categoryreq.addValueEventListener(getpostlist);
+               // board_categoryreq.addListenerForSingleValueEvent(getpostlist);
+            }
+            else if(v.equals(prepagebtn)){
+                if(PAGENUM>1)
+                    PAGENUM--;
+                else
+                    PAGENUM=1;
+               // pageflag=-1;
+                //board_categoryreq.addValueEventListener(getpostlist);
+                //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
+            }
+            else if(v.equals(next5pagebtn)){
+                if(PAGENUM+5<PAGEMAXNUM)
+                    PAGENUM=PAGENUM+5;
+                else{
+                    PAGENUM=PAGEMAXNUM;
+                }
+               // pageflag=5;
+                //board_categoryreq.addValueEventListener(getpostlist);
+               //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
+            }
+            else if(v.equals(pre5pagebtn)){
+                if(PAGENUM-5>1)
+                    PAGENUM=PAGENUM-5;
+                else
+                    PAGENUM=1;
+                //pageflag=-5;
+                //board_categoryreq.addValueEventListener(getpostlist);
+                //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
+            }
+            board_categoryreq = FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
+            board_categoryreq.addValueEventListener(getpostlistten);
+           // board_categoryreq.addListenerForSingleValueEvent(getpostlist);
+        }
+    };
+    //글 선택시.
+    View.OnClickListener listen_post = new View.OnClickListener() {
+        //LinerLayout자체에 클릭리스너 걸어서 클릭시 글정보 알수 있게
+        //나중에 게시글 띄울때 정보 넘겨줌.(글넘버.)
+        @Override
+        public void onClick(View v) {
+            int index = -1;
+            for (int i = 0; i < 10; i++) {
+                if (v.getId() == postcontainerlist.get(i).getId()) {
+                    //똑같은 애다?
+                    index = i;
+                    break;
+                } else
+                    continue;
+            }
+            if (index >= 0) {
+                Intent intent = new Intent(getApplicationContext(), PostView.class);
+                //일단 유저넘버랑 카테고리명 넘겨주고
+                intent.putExtra("categoryname", categoryname);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(),
+                        postnolist.get(index).getText().toString() + posttitlelist.get(index).getText().toString() + postownerlist.get(index).getText().toString()
+                        , Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(getApplicationContext(), "에러 타이틀 인덱스를 못 얻어옴", Toast.LENGTH_SHORT).show();
+        }
+    };
+    //검색버튼 선택시.
+    View.OnClickListener listen_post_search = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //tx_post_search.getText().toString(); edittext값
+            //spinner.getSelectedItem().toString() 스피너 값
+            Toast.makeText(getApplicationContext(), tx_post_search.getText().toString() + spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+
+        }
+    };
+    //검색스피너 선택 액션
+    AdapterView.OnItemSelectedListener Spinner_select = new AdapterView.OnItemSelectedListener() {
+        //스피너 선택이 되었을 때
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            searchspinner = spinner.getSelectedItem().toString();
+            // 테스트용
+            // Toast.makeText(getApplicationContext(),tmp_share,Toast.LENGTH_SHORT).show();
+        }
+
+        //스피너 설정 선택이 안되었을 때
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            Toast.makeText(getApplicationContext(), "검색설정을 불러오지 못했습니다..." + "\n" +
+                    "뒤로가기후 시도해주세요.", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.boardactionbar, menu);
+        return true;
+    }
+
+    //글쓰기 액션버튼을 클릭했을때의 동작->글쓰기 액티비티로 전송(username,categoryname)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.board_action_write) {
+            Intent intent = new Intent(this, PostWrite.class);
+
+            intent.putExtra("categoryname", categoryname);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    ValueEventListener getpostlistten=new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            ArrayList<Board_post> postviewlist=new ArrayList<>();
+            int pagenum=PAGENUM;
+            int i=0;
+            if((int)dataSnapshot.getChildrenCount()%10>0){
+                PAGEMAXNUM=((int)dataSnapshot.getChildrenCount()/10)+1;
+            }
+            else{
+                PAGEMAXNUM=(int)dataSnapshot.getChildrenCount()/10;
+            }
+            //view재갱신 안되다가 한번에 될경우 혹은 버튼클릭사이에 글이 삭제될경우 PAGENUM이 PAGEMAXNUM을 안넘도록 제한.
+            if(PAGENUM>PAGEMAXNUM)
+                PAGENUM=PAGEMAXNUM;
+            //13개가 있다면?0123456789101112
+            // dataSnapshot.getChildrenCount()이 전체 갯수
+            //13-0 13-1.......13-9// 2page? 13-10...
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                //해당 페이지의 게시글만 읽겠다.
+                //24 23222120191817161514 //13121110987654//
+                //작은 값(ex14)&&큰값(ex23)
+                if(i>=dataSnapshot.getChildrenCount()-10*(pagenum)&&i<dataSnapshot.getChildrenCount()-10*(pagenum-1)){
+                    Object p_noname=snapshot.child("isnoname").getValue(Object.class);
+                        if(p_noname.toString().equals("true")){
+                            Object p_n=snapshot.child("postnum").getValue(Object.class);
+                            Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                            if(p_t==null) p_t="";
+                            if(p_n==null) p_n="";
+                            postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),"noname"));
+                        }
+                        else{
+                            Object p_n=snapshot.child("postnum").getValue(Object.class);
+                            Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                            Object p_o=snapshot.child("postowner").getValue(Object.class);
+                            if(p_t==null) p_t="";
+                            if(p_n==null) p_n="";
+                            if(p_o==null) p_o="";
+
+                            postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),p_o.toString()));
+                        }
+
+                }
+                //해당 페이지가 아닌 순서는 그냥 null
+                else{
+
+                }
+                i++;
+
+            }
+            //i=12 12
+            Collections.reverse(postviewlist);
+            for(int j= postviewlist.size();j<10;j++){
+                postviewlist.add(j,new Board_post("","",""));
+            }
+            //순서 바꾸기 1098765...
+
+            //이제 view를 띄운다. 나중엔 업데이트뷰를 만들거임
+            //Toast.makeText(getApplicationContext(),Integer.toString(PAGEMAXNUM),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),postviewlist.get(0).getPostnum(),Toast.LENGTH_SHORT).show();
+            creatview(postviewlist);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+    /*
     //동적 뷰 생성.
     protected void creatactive(ArrayList<Board_post> boardnumlist) {
         postcount = boardnumlist.size()-1;
@@ -209,7 +458,8 @@ public class Board_0 extends AppCompatActivity {
             postcontainerlist.add(postcontainer);
         }
     }
-
+*/
+    /*
     //동적뷰 수정(페이지 이동시)
     protected void updateactive(ArrayList<Board_post> boardnumlist,PageMove MOVE) {
         //PageMove PRE5, PRE, NEXT, NEXT5
@@ -303,110 +553,8 @@ public class Board_0 extends AppCompatActivity {
         //플래그 다시 돌려주기
         pageflag=0;
 
-    }
-    //다음페이지
-    View.OnClickListener pagemovebtnlisten=new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(v.equals(nextpagebtn)){
-                pageflag=1;
-                //board_categoryreq.addValueEventListener(getpostlist);
-               // board_categoryreq.addListenerForSingleValueEvent(getpostlist);
-            }
-            else if(v.equals(prepagebtn)){
-                pageflag=-1;
-                //board_categoryreq.addValueEventListener(getpostlist);
-                //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
-            }
-            else if(v.equals(next5pagebtn)){
-                pageflag=5;
-                //board_categoryreq.addValueEventListener(getpostlist);
-               //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
-            }
-            else if(v.equals(pre5pagebtn)){
-                pageflag=-5;
-                //board_categoryreq.addValueEventListener(getpostlist);
-                //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
-            }
-            board_categoryreq.addListenerForSingleValueEvent(getpostlist);
-        }
-    };
-    //글 선택시.
-    View.OnClickListener listen_post = new View.OnClickListener() {
-        //LinerLayout자체에 클릭리스너 걸어서 클릭시 글정보 알수 있게
-        //나중에 게시글 띄울때 정보 넘겨줌.(글넘버.)
-        @Override
-        public void onClick(View v) {
-            int index = -1;
-            for (int i = 0; i < 10; i++) {
-                if (v.getId() == postcontainerlist.get(i).getId()) {
-                    //똑같은 애다?
-                    index = i;
-                    break;
-                } else
-                    continue;
-            }
-            if (index >= 0) {
-                Intent intent = new Intent(getApplicationContext(), PostView.class);
-                //일단 유저넘버랑 카테고리명 넘겨주고
-                intent.putExtra("categoryname", categoryname);
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(),
-                        postnolist.get(index).getText().toString() + posttitlelist.get(index).getText().toString() + postownerlist.get(index).getText().toString()
-                        , Toast.LENGTH_SHORT).show();
-            } else
-                Toast.makeText(getApplicationContext(), "에러 타이틀 인덱스를 못 얻어옴", Toast.LENGTH_SHORT).show();
-        }
-    };
-    //검색버튼 선택시.
-    View.OnClickListener listen_post_search = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            //tx_post_search.getText().toString(); edittext값
-            //spinner.getSelectedItem().toString() 스피너 값
-            Toast.makeText(getApplicationContext(), tx_post_search.getText().toString() + spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-
-        }
-    };
-    //검색스피너 선택 액션
-    AdapterView.OnItemSelectedListener Spinner_select = new AdapterView.OnItemSelectedListener() {
-        //스피너 선택이 되었을 때
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            searchspinner = spinner.getSelectedItem().toString();
-            // 테스트용
-            // Toast.makeText(getApplicationContext(),tmp_share,Toast.LENGTH_SHORT).show();
-        }
-
-        //스피너 설정 선택이 안되었을 때
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-            Toast.makeText(getApplicationContext(), "검색설정을 불러오지 못했습니다..." + "\n" +
-                    "뒤로가기후 시도해주세요.", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.boardactionbar, menu);
-        return true;
-    }
-
-    //글쓰기 액션버튼을 클릭했을때의 동작->글쓰기 액티비티로 전송(username,categoryname)
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.board_action_write) {
-            Intent intent = new Intent(this, PostWrite.class);
-
-            intent.putExtra("categoryname", categoryname);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    }*/
+    /*
     ValueEventListener getpostlist = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -448,5 +596,5 @@ public class Board_0 extends AppCompatActivity {
         public void onCancelled(@NonNull DatabaseError databaseError) {
 
         }
-    };
+    };*/
 }

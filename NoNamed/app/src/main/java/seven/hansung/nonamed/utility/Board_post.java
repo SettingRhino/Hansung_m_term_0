@@ -20,6 +20,15 @@ public class Board_post {
     }
 
     public Board_post(String postnum, String posttitle, String postowner) {
+        if(postnum==null){
+            postnum="";
+        }
+        if(posttitle==null){
+            posttitle="";
+        }
+        if(postowner==null){
+            postowner="";
+        }
         this.postnum = postnum;
         this.posttitle = posttitle;
         this.postowner = postowner;
