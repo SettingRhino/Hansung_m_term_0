@@ -37,6 +37,7 @@ public class Board_0 extends AppCompatActivity {
     DatabaseReference board_categoryreq;
     public static int PAGENUM=1;
     public static int PAGEMAXNUM=1;
+    public static int SEARCHFLAG=0;
     public enum PageMove {
         PRE5, PRE, NEXT, NEXT5
     }
@@ -72,6 +73,7 @@ public class Board_0 extends AppCompatActivity {
     Intent intent;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +90,7 @@ public class Board_0 extends AppCompatActivity {
         pagenavi=findViewById(R.id.pagenavi);
         tx_post_search = findViewById(R.id.tx_post_search);
         bt_post_search = findViewById(R.id.bt_post_search);
+
 
     }
 
@@ -134,6 +137,14 @@ public class Board_0 extends AppCompatActivity {
         next5pagebtn.setOnClickListener(pagemovebtnlisten);
         prepagebtn.setOnClickListener(pagemovebtnlisten);
         pre5pagebtn.setOnClickListener(pagemovebtnlisten);
+        bt_post_search.setOnClickListener(listen_post_search);
+
+
+        spinner = findViewById(R.id.board_search_spinner);
+        spinnercraet = new Spinnercreat();
+        spinerAdapter = spinnercraet.creatAdapter(spinerAdapter, R.array.board_search_spinner, this);
+        spinner.setAdapter(spinerAdapter);
+        spinner.setOnItemSelectedListener(Spinner_select);
     }
 
     //이하 리스너 혹은 다른 함수
@@ -187,12 +198,7 @@ public class Board_0 extends AppCompatActivity {
         }
         pagenavi.setTextSize(20);
         pagenavi.setText(PAGENUM+" OF "+PAGEMAXNUM);
-        spinner = findViewById(R.id.board_search_spinner);
-        spinnercraet = new Spinnercreat();
-        spinerAdapter = spinnercraet.creatAdapter(spinerAdapter, R.array.board_search_spinner, this);
-        spinner.setAdapter(spinerAdapter);
-        spinner.setOnItemSelectedListener(Spinner_select);
-        bt_post_search.setOnClickListener(listen_post_search);
+
 
     }
 
@@ -241,10 +247,14 @@ public class Board_0 extends AppCompatActivity {
                 //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
             }
             board_categoryreq = FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
-            board_categoryreq.addValueEventListener(getpostlistten);
+            if(SEARCHFLAG==0)
+                board_categoryreq.addValueEventListener(getpostlistten);
+            else
+                board_categoryreq.addValueEventListener(getsearchpostlistten);
            // board_categoryreq.addListenerForSingleValueEvent(getpostlist);
         }
     };
+
     //글 선택시.
     View.OnClickListener listen_post = new View.OnClickListener() {
         //LinerLayout자체에 클릭리스너 걸어서 클릭시 글정보 알수 있게
@@ -276,9 +286,9 @@ public class Board_0 extends AppCompatActivity {
     View.OnClickListener listen_post_search = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //tx_post_search.getText().toString(); edittext값
-            //spinner.getSelectedItem().toString() 스피너 값
-            Toast.makeText(getApplicationContext(), tx_post_search.getText().toString() + spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+            PAGENUM=1;
+            FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef().addValueEventListener(getsearchpostlistten);
+           // Toast.makeText(getApplicationContext(), searchoption+":"+tx_post_search.getText().toString() + spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
 
         }
     };
@@ -320,13 +330,13 @@ public class Board_0 extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
     ValueEventListener getpostlistten=new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             ArrayList<Board_post> postviewlist=new ArrayList<>();
+            SEARCHFLAG=0;
             int pagenum=PAGENUM;
-            int i=0;
+            int i=0;//맥스페이지 설정
             if((int)dataSnapshot.getChildrenCount()%10>0){
                 PAGEMAXNUM=((int)dataSnapshot.getChildrenCount()/10)+1;
             }
@@ -339,13 +349,117 @@ public class Board_0 extends AppCompatActivity {
             //13개가 있다면?0123456789101112
             // dataSnapshot.getChildrenCount()이 전체 갯수
             //13-0 13-1.......13-9// 2page? 13-10...
-            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            if(dataSnapshot.getChildrenCount()<10){
+                PAGENUM=1;
+                PAGEMAXNUM=1;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Object p_noname=snapshot.child("isnoname").getValue(Object.class);
+                    if(p_noname.toString().equals("true")){
+                        Object p_n=snapshot.child("postnum").getValue(Object.class);
+                        Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                        if(p_t==null) p_t="";
+                        if(p_n==null) p_n="";
+                        postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),"noname"));
+                    }
+                    else{
+                        Object p_n=snapshot.child("postnum").getValue(Object.class);
+                        Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                        Object p_o=snapshot.child("postowner").getValue(Object.class);
+                        if(p_t==null) p_t="";
+                        if(p_n==null) p_n="";
+                        if(p_o==null) p_o="";
+
+                        postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),p_o.toString()));
+                    }
+                }
+            }
+            else{
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                 //해당 페이지의 게시글만 읽겠다.
                 //24 23222120191817161514 //13121110987654//
                 //작은 값(ex14)&&큰값(ex23)
-                if(i>=dataSnapshot.getChildrenCount()-10*(pagenum)&&i<dataSnapshot.getChildrenCount()-10*(pagenum-1)){
-                    Object p_noname=snapshot.child("isnoname").getValue(Object.class);
-                        if(p_noname.toString().equals("true")){
+                    if(i>=dataSnapshot.getChildrenCount()-10*(pagenum)&&i<dataSnapshot.getChildrenCount()-10*(pagenum-1)){
+                        Object p_noname=snapshot.child("isnoname").getValue(Object.class);
+                            if(p_noname.toString().equals("true")){
+                                Object p_n=snapshot.child("postnum").getValue(Object.class);
+                                Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                                if(p_t==null) p_t="";
+                                if(p_n==null) p_n="";
+                                postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),"noname"));
+                            }
+                            else{
+                                Object p_n=snapshot.child("postnum").getValue(Object.class);
+                                Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                                Object p_o=snapshot.child("postowner").getValue(Object.class);
+                                if(p_t==null) p_t="";
+                                if(p_n==null) p_n="";
+                                if(p_o==null) p_o="";
+
+                                postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),p_o.toString()));
+                        }
+
+                    }
+                //해당 페이지가 아닌 순서는 그냥 null
+                    else{
+
+                    }
+                i++;
+
+                }
+            }
+            //i=12 12
+            //순서 바꾸기 1098765...
+            Collections.reverse(postviewlist);
+            for(int j= postviewlist.size();j<10;j++){
+                postviewlist.add(j,new Board_post("","",""));
+            }
+
+            //이제 view를 띄운다. 나중엔 업데이트뷰를 만들거임
+            //Toast.makeText(getApplicationContext(),Integer.toString(PAGEMAXNUM),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),postviewlist.get(0).getPostnum(),Toast.LENGTH_SHORT).show();
+            creatview(postviewlist);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+    ValueEventListener getsearchpostlistten=new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            ArrayList<Board_post> postviewlist=new ArrayList<>();
+            SEARCHFLAG=1;
+            int i=0;
+            //스피너 설정과 입력값 가져오기
+            String searchoption="posttitle";
+            if(spinner.getSelectedItem().toString().equals("글제목"))
+                searchoption="posttitle";
+            if(spinner.getSelectedItem().toString().equals("글번호"))
+                searchoption="postnum";
+            if(spinner.getSelectedItem().toString().equals("작성자"))
+                searchoption="postowner";
+            EditText searchvaluetx= (EditText)findViewById(R.id.tx_post_search);
+            String searchvalue=searchvaluetx.getText().toString();
+            //다시생각-> 글작성자 일때만 익명글 검색 하면안됨.
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                if(searchoption.equals("postowner")){//검색조건이 글작성자면
+                    if(snapshot.child(searchoption).getValue(Object.class).toString().contains(searchvalue)){//검색조건에 포함되면
+                        if(snapshot.child("isnoname").getValue(Object.class).toString().equals("false")){//isnoname이 false->익명아닌애들만 검색
+                            Object p_n=snapshot.child("postnum").getValue(Object.class);
+                            Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                            Object p_o=snapshot.child("postowner").getValue(Object.class);
+                            if(p_t==null) p_t="";
+                            if(p_n==null) p_n="";
+                            if(p_o==null) p_o="";
+
+                            postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),p_o.toString()));}
+                    }
+                    else{}
+                }
+                else{//검색조건이 글작성자가 아니면
+                    if(snapshot.child(searchoption).getValue(Object.class).toString().contains(searchvalue)){//조건에 포함되는 애들 모두 검색
+                        if(snapshot.child("isnoname").getValue(Object.class).toString().equals("true")){//만약 익명의 글이면 noname로 표시
                             Object p_n=snapshot.child("postnum").getValue(Object.class);
                             Object p_t=snapshot.child("posttitle").getValue(Object.class);
                             if(p_t==null) p_t="";
@@ -362,25 +476,47 @@ public class Board_0 extends AppCompatActivity {
 
                             postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),p_o.toString()));
                         }
-
+                    }
+                    else{}
                 }
-                //해당 페이지가 아닌 순서는 그냥 null
-                else{
-
-                }
-                i++;
-
+            }
+            if(postviewlist.size()%10>0){
+                PAGEMAXNUM=postviewlist.size()/10+1;
+            }
+            else{
+                PAGEMAXNUM=postviewlist.size()/10;
             }
             //i=12 12
             Collections.reverse(postviewlist);
-            for(int j= postviewlist.size();j<10;j++){
-                postviewlist.add(j,new Board_post("","",""));
+            //10이하.
+            if(postviewlist.size()<10){
+                for(int j= postviewlist.size();j<10;j++){
+                    postviewlist.add(j,new Board_post("","",""));
+                }
+            }
+            else{//열개 이상 ->앞 10개만 받자.
+                for(int r=0;r<=((PAGENUM-1)*10-1);r++)
+                    postviewlist.remove(0);
+                //검색의 마지막 페이지일 경우 빈칸 만들기.
+                for(int j= postviewlist.size();j<10;j++){
+                    postviewlist.add(j,new Board_post("","",""));
+                }
+                //위처럼 하니까 1페이지일때 그냥 다 받아오게됨... 1페이지 일 경우 뒤 제거.
+                if(PAGENUM==1){
+                    for(int t=10;t<=postviewlist.size();t++){
+                        postviewlist.remove(10);
+                    }
+                }
             }
             //순서 바꾸기 1098765...
 
             //이제 view를 띄운다. 나중엔 업데이트뷰를 만들거임
             //Toast.makeText(getApplicationContext(),Integer.toString(PAGEMAXNUM),Toast.LENGTH_SHORT).show();
-            //Toast.makeText(getApplicationContext(),postviewlist.get(0).getPostnum(),Toast.LENGTH_SHORT).show();
+            /*String tttt="";
+            for(int k=0;k<postviewlist.size();k++)
+                tttt+=k+postviewlist.get(k).getPosttitle()+"/";
+            tttt+=postviewlist.size();
+            Toast.makeText(getApplicationContext(),tttt,Toast.LENGTH_LONG).show();*/
             creatview(postviewlist);
         }
 
