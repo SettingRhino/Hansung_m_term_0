@@ -1,3 +1,16 @@
+# Hansung_m_term_0
+# 고급모바일소프트웨어 텀프로젝트.
+# 이범학, 최진규, 엄태준 참여.
+# 텀프로젝트 계획:  firebase를 이용한 익명의 게시판어플
+#                   덧글, 혹은 채팅(or익명쪽지)을 연계
+#                   게시판 외의 추가적인 기능[계획중]
+#                   카테고리의 구분으로 게시판 분화.
+#                   오픈소스의 사용은 최소화.
+#                   
+# 사용언어:java & kotlin
+#          kotlin위주의 작업으로 진행예정중 잠깐
+# 
+
 branch-firebaseconnect에서 firebaseAuth를 추가 연결한 브런치
 EOM-TJ-commit memo:11.18_0
 기능구현-
