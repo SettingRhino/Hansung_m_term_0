@@ -142,7 +142,6 @@ public class Board_0 extends AppCompatActivity {
         pre5pagebtn.setOnClickListener(pagemovebtnlisten);
         bt_post_search.setOnClickListener(listen_post_search);
 
-
         spinner = findViewById(R.id.board_search_spinner);
         spinnercraet = new Spinnercreat();
         spinerAdapter = spinnercraet.creatAdapter(spinerAdapter, R.array.board_search_spinner, this);
@@ -276,7 +275,8 @@ public class Board_0 extends AppCompatActivity {
             if (index >= 0) {
                 Intent intent = new Intent(getApplicationContext(), PostView.class);
                 //일단 유저넘버랑 카테고리명 넘겨주고
-                intent.putExtra("categoryname", categoryname);
+               intent.putExtra("categoryname", categoryname);
+                intent.putExtra("postnum",postnolist.get(index).getText().toString());
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(),
                         postnolist.get(index).getText().toString() + posttitlelist.get(index).getText().toString() + postownerlist.get(index).getText().toString()
@@ -532,6 +532,7 @@ public class Board_0 extends AppCompatActivity {
 
         }
     };
+
     /*
     //동적 뷰 생성.
     protected void creatactive(ArrayList<Board_post> boardnumlist) {

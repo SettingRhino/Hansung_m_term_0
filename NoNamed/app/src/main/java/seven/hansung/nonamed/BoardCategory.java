@@ -47,7 +47,7 @@ public class BoardCategory extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
-        startActivity(new Intent(this,MyPage.class));
+        startActivity(new Intent(this,SelectMenu.class));
     }
     View.OnClickListener Listen_boardcategory00=new View.OnClickListener() {
         @Override

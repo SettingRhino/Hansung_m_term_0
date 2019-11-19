@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     Logincontroller logincontroller;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "GoogleActivity";
-
     private GoogleSignInClient mSignInClient;
 
 

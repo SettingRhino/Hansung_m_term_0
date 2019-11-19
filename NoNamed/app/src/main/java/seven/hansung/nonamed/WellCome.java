@@ -70,6 +70,7 @@ public class WellCome extends AppCompatActivity implements View.OnClickListener 
         // Check if user is signed in (non-null) and update UI accordingly.
         //액티비티 초기화시에 로그인 되어있는지 확인한다.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
     }
     private void signup(){
         database = FirebaseDatabase.getInstance().getReference();
@@ -143,6 +144,8 @@ public class WellCome extends AppCompatActivity implements View.OnClickListener 
                 userValue.put("ownerboradnum", "-1");
                 userValue.put("ownercommentnum", "-1");
                 userValue.put("chatuser", "null");
+                userValue.put("uid", user.getUid());
+
 
                 String key = userref.push().getKey();
                 DatabaseReference keyref = userref.child(key);
