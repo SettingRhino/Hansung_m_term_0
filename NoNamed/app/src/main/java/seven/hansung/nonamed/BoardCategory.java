@@ -45,6 +45,10 @@ public class BoardCategory extends AppCompatActivity {
         mcategoryRef.addListenerForSingleValueEvent(getcategory);
         //여러개 반복구간끝
     }
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this,MyPage.class));
+    }
     View.OnClickListener Listen_boardcategory00=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -52,9 +56,9 @@ public class BoardCategory extends AppCompatActivity {
             String categoryname=categoryitem.getText().toString();
             Toast.makeText(BoardCategory.this, categoryname, Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(BoardCategory.this,Board_0.class);
-            //유저네임을 보내줌.
+            //유저네임을 보내줌.X
             intent.putExtra("categoryname",categoryname);
-            intent.putExtra("username",username);
+            //intent.putExtra("username",username);
             startActivity(intent);
         }
     };

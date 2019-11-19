@@ -65,6 +65,12 @@ public class PostWrite extends AppCompatActivity {
 
 
         }
+    @Override
+    public void onBackPressed(){
+            Intent intent = new Intent(getApplicationContext(),Board_0.class);
+            intent.putExtra("categoryname",categoryname);
+        startActivity(intent);
+    }
 
         protected void init(){
             categoryref=boardref.child(categoryname).getRef();

@@ -98,7 +98,10 @@ public class Board_0 extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
     }
-
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(getApplicationContext(),BoardCategory.class));
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -326,6 +329,10 @@ public class Board_0 extends AppCompatActivity {
             intent.putExtra("categoryname", categoryname);
             startActivity(intent);
             return true;
+        }
+        if(id==R.id.board_action_num_one){
+            PAGENUM=1;
+            FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef().addValueEventListener(getpostlistten);
         }
 
         return super.onOptionsItemSelected(item);
