@@ -1,15 +1,21 @@
 <<<<<<< HEAD
+
 EOM-TJ-
+<<<<<<< HEAD
 1119_3
 1.페이지 1으로 가는 아이콘 변경
 2.인텐트설정 수정[뒤로 가기버튼액션 지정하여 액티비티 이동 안정화.]
 -EOM-TJ
 EOM-TJ-
+=======
+branch-firebaseconnect branch 
+>>>>>>> a340d0873d558260c04348cbb57dc8802d0a7b3f
 1119_2
 1. 1119의 페이지이동 기능의 또다른 오류 발견 10개이하의 게시판 들어가면 페이지이동이 기능이 한번에 작동하지 않음[함수내 순서 조건 추가로 해결]
 2.검색기능 추가.[글작성자,글제목,번호등 검색가능-글작성자 검색시 익명 게시글은 검색되지 않음]
 -EOM-TJ
 EOM-TJ-
+branch-firebaseconnect branch 
 -1119
 1. 11.18의 4번 오류 해결 페이지이동 원할히 됩니다.
 2.검색기능 추가예정
@@ -28,7 +34,7 @@ EOM-TJ-
 #          kotlin위주의 작업으로 진행예정중 잠깐
 # 
 
-branch-firebaseconnect에서 firebaseAuth를 추가 연결한 브런치
+branch-firebaseconnect branch 
 EOM-TJ-commit memo:11.18_0
 기능구현-
 1.회원가입부분을 전반적으로 수정함.
