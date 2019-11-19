@@ -58,12 +58,13 @@ public class Board_0 extends AppCompatActivity {
     protected Button bt_post_search;
     protected Spinner spinner;
     protected Spinnercreat spinnercraet;
+    static String categoryname;
     ArrayAdapter<CharSequence> spinerAdapter;
     //
     TextView categorytitle;
     String searchspinner;
 
-    String categoryname;
+
     Boolean postOK = false;
     ImageButton nextpagebtn;
     ImageButton prepagebtn;
@@ -113,6 +114,9 @@ public class Board_0 extends AppCompatActivity {
         //글쓰기 후 다시 돌아올경우.
         if (intent.getBooleanExtra("postOK", postOK)) {
             Toast.makeText(this, "글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+        }
+        if (intent.getBooleanExtra("modifyOK", postOK)) {
+            Toast.makeText(this, "글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
         }
         categorytitle.setText(categoryname);
         init();
@@ -273,16 +277,19 @@ public class Board_0 extends AppCompatActivity {
                     continue;
             }
             if (index >= 0) {
+                if(!postownerlist.get(index).getText().equals("")){
                 Intent intent = new Intent(getApplicationContext(), PostView.class);
-                //일단 유저넘버랑 카테고리명 넘겨주고
+                //글넘버 카테고리명
                intent.putExtra("categoryname", categoryname);
                 intent.putExtra("postnum",postnolist.get(index).getText().toString());
                 startActivity(intent);
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         postnolist.get(index).getText().toString() + posttitlelist.get(index).getText().toString() + postownerlist.get(index).getText().toString()
-                        , Toast.LENGTH_SHORT).show();
+                        , Toast.LENGTH_SHORT).show();*/
+                }
             } else
                 Toast.makeText(getApplicationContext(), "에러 타이틀 인덱스를 못 얻어옴", Toast.LENGTH_SHORT).show();
+
         }
     };
     //검색버튼 선택시.

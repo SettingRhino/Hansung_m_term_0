@@ -26,7 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseReference database;
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     protected Button bt_Wcome;
     static String email="";
-    Logincontroller logincontroller;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "GoogleActivity";
     private GoogleSignInClient mSignInClient;
@@ -106,10 +104,10 @@ public class MainActivity extends AppCompatActivity {
                             fireemail=str.toString();
                         }
                         if(fireemail.equals(email)){//등록된 회원이면
-                            Toast.makeText(getApplicationContext(),"firebase조회:"+fireemail+"    현재사용자조회:"+email,Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(),"firebase조회:"+fireemail+"    현재사용자조회:"+email,Toast.LENGTH_LONG).show();
 
                             Intent intent=new Intent(MainActivity.this,SelectMenu.class);
-                            //이제는 인텐트로 값 안넘겨줌
+                            //이제는 인텐트로 username값 안넘겨줌
                             //intent.putExtra("username",login_id);
                             startActivity(intent);
                         }

@@ -2,6 +2,7 @@ package seven.hansung.nonamed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -9,11 +10,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,7 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +44,13 @@ public class PostWrite extends AppCompatActivity {
     DatabaseReference boardref;
     DatabaseReference categoryref;
     DatabaseReference userref;
+    DatabaseReference modifypostreq;
+    private static final int RC_SIGN_IN = 9001;
+    private static final String TAG = "GoogleActivity";
+    private GoogleSignInClient mSignInClient;
     private FirebaseAuth mAuth;
+    static String email="";
+    static String categoryname="";
     protected Spinner spinner;
     protected ArrayAdapter<CharSequence> spinerAdapter;
     protected EditText tx_write_title;
@@ -44,7 +59,8 @@ public class PostWrite extends AppCompatActivity {
     protected Button bt_write_ok;
     ArrayList<String> spinner_arr;
     String tmp_share;
-    String categoryname;
+
+
     int boarn;
     String username;
         @Override
@@ -53,18 +69,31 @@ public class PostWrite extends AppCompatActivity {
             setContentView(R.layout.post_write);
             database = FirebaseDatabase.getInstance().getReference();
             mcategoryRef = database.child("category");
-            Intent intent=getIntent();
-            //데이터 구성시 사용
-            //username=intent.getStringExtra("username");
-            categoryname=intent.getStringExtra("categoryname");
             boardref= database.child("board").getRef();
             categoryref=boardref.child(categoryname).getRef();
-            //Toast.makeText(this,categoryname,Toast.LENGTH_LONG).show();
-            init();
-
-
-
         }
+    @Override
+    public void onStart() {
+        super.onStart();
+        //1.Google로그임옵션 객체를 만든다
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        //2.googleAPI클라이언트 생성
+        mSignInClient= GoogleSignIn.getClient(this,gso);
+        //여기서는 주소만 가져옴 가입 x
+        mAuth = FirebaseAuth.getInstance();
+        //client로부터 인텐트를 불러와 엑티비티 시행->사용자의 데이터를 받아올수 있음
+        //결과를 넘겨주면서 activity호출 코드값은 9001
+        Intent signintent=mSignInClient.getSignInIntent();
+        startActivityForResult(signintent,RC_SIGN_IN);
+        Intent intent=getIntent();
+        //데이터 구성시 사용
+        categoryname=intent.getStringExtra("categoryname");
+        init();
+
+    }
     @Override
     public void onBackPressed(){
             Intent intent = new Intent(getApplicationContext(),Board_0.class);
@@ -85,18 +114,73 @@ public class PostWrite extends AppCompatActivity {
             bt_write_ok=findViewById(R.id.bt_write_ok);
             bt_write_ok.setOnClickListener(listen_ok);
 
+            Intent intent=getIntent();
+            int num=intent.getIntExtra("postmodifynum",-1);
+            Boolean modifypost=intent.getBooleanExtra("postmodify",false);
+            categoryname=intent.getStringExtra("categoryname");
+            if(modifypost&&num!=-1){
+                //있는 내용 띄우기->재작성->데이터베이스 수정[버튼리스너 다시.]
+                modifypostreq=FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
+                modifypostreq.orderByChild("postnum").equalTo(Integer.toString(num)).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Object modifycontent=snapshot.child("content").getValue(Object.class);
+                            Object modifyposttitle=snapshot.child("posttitle").getValue(Object.class);
+                            Toast.makeText(getApplicationContext(),modifycontent.toString(),Toast.LENGTH_LONG).show();
+                            TextView modifycontenttxt=findViewById(R.id.tx_write_content);
+                            TextView modifytitletxt=findViewById(R.id.tx_write_title);
+                            modifycontenttxt.setText(modifycontent.toString());
+                            modifytitletxt.setText(modifyposttitle.toString());
+                        }
+                        bt_write_ok=findViewById(R.id.bt_write_ok);
+                        bt_write_ok.setOnClickListener(modify_ok);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
         }
+        View.OnClickListener modify_ok=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=getIntent();
+                int num=intent.getIntExtra("postmodifynum",-1);
+                modifypostreq=FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
+                modifypostreq.orderByChild("postnum").equalTo(Integer.toString(num)).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            TextView modifycontenttxt=findViewById(R.id.tx_write_content);
+                            TextView modifytitletxt=findViewById(R.id.tx_write_title);
+                            snapshot.child("content").getRef().setValue(modifycontenttxt.getText().toString());
+                            snapshot.child("posttitle").getRef().setValue(modifytitletxt.getText().toString());
+                        }
+                        Intent boardintent=new Intent(getApplicationContext(),Board_0.class);
+                        boardintent.putExtra("categoryname",categoryname);
+                        boardintent.putExtra("modifyOK",true);
+                        startActivity(boardintent);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        };
         View.OnClickListener listen_ok=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mAuth = FirebaseAuth.getInstance();
-
                 userref=database.child("user").getRef();
-                userref.orderByChild("email").equalTo(mAuth.getCurrentUser().getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+                userref.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String nickname="";
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                            Object usernickname= snapshot.child("nickname").getValue(Object.class);
                             username=usernickname.toString();
@@ -152,7 +236,6 @@ public class PostWrite extends AppCompatActivity {
                     }
                 });
                 //업로드할 데이터를 구성한다.
-
             }
         };
         //스피너 선택시.
@@ -202,10 +285,31 @@ public class PostWrite extends AppCompatActivity {
 
             spinner.setAdapter(spinerAdapter);
             spinner.setOnItemSelectedListener( Spinner_select);
+            for(int i=0;i<spinner_arr.size();i++){
+                if(spinner_arr.get(i).equals(categoryname))
+                    spinner.setSelection(i);
+            }
         }
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
         }
     };
-
+    @Override//4.사용자 계정을 얻어온다.
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                //사용자 계정을 얻어온다.
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                email=account.getEmail();
+                //account부터 접근이 가능한것.
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+                // ...
+            }
+        }
+    }
 }

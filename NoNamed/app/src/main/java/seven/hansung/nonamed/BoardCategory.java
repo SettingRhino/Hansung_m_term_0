@@ -54,7 +54,7 @@ public class BoardCategory extends AppCompatActivity {
         public void onClick(View v) {
             TextView categoryitem=(TextView) v;
             String categoryname=categoryitem.getText().toString();
-            Toast.makeText(BoardCategory.this, categoryname, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(BoardCategory.this, categoryname, Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(BoardCategory.this,Board_0.class);
             //유저네임을 보내줌.X
             intent.putExtra("categoryname",categoryname);
