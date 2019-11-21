@@ -7,6 +7,7 @@ public class PostInfo {
     public String isnoname;
     public String postnum;
     public String postowner;
+    public String postowneruid;
     public String posttitle;
 
     public PostInfo() {
@@ -16,6 +17,7 @@ public class PostInfo {
         this.isnoname = "";
         this.postnum = "";
         this.postowner = "";
+        this.postowneruid = "";
         this.posttitle = "";
     }
 
@@ -26,7 +28,12 @@ public class PostInfo {
         this.isnoname = isnoname;
         this.postnum = postnum;
         this.postowner = postowner;
+        this.postowneruid = postowneruid;
         this.posttitle = posttitle;
+    }
+
+    public String getPostowneruid() {
+        return postowneruid;
     }
 
     public String getCategoy() {

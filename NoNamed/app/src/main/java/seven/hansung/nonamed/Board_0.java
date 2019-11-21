@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 
 import seven.hansung.nonamed.utility.Board_post;
 import seven.hansung.nonamed.utility.Spinnercreat;
@@ -46,6 +47,7 @@ public class Board_0 extends AppCompatActivity {
     protected ArrayList<TextView> postnolist;
     protected ArrayList<TextView> posttitlelist;
     protected ArrayList<TextView> postownerlist;
+    ArrayList<Board_post> postviewlist;
     LinearLayout.LayoutParams postnoparam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.5f);
     LinearLayout.LayoutParams posttitleparam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 10f);
     LinearLayout.LayoutParams postownerparam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.5f);
@@ -63,8 +65,8 @@ public class Board_0 extends AppCompatActivity {
     //
     TextView categorytitle;
     String searchspinner;
-
-
+    HashMap<String,String> nickmap;
+    ArrayList<TextView> post_text_owner;
     Boolean postOK = false;
     ImageButton nextpagebtn;
     ImageButton prepagebtn;
@@ -72,6 +74,7 @@ public class Board_0 extends AppCompatActivity {
     ImageButton pre5pagebtn;
     TextView pagenavi;
     Intent intent;
+    TextView v;
 
 
 
@@ -79,8 +82,9 @@ public class Board_0 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board_base);
+        post_text_owner=new ArrayList<>();
         intent = getIntent();
-
+        nickmap=new HashMap<>();
         categoryname = intent.getStringExtra("categoryname");
         categorytitle = findViewById(R.id.board_title);
 
@@ -106,10 +110,11 @@ public class Board_0 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        postviewlist=new ArrayList<>();
         //board-category 참조 가져옴
         board_categoryreq = FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
         board_categoryreq.addValueEventListener(getpostlistten);
+
         //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
         //글쓰기 후 다시 돌아올경우.
         if (intent.getBooleanExtra("postOK", postOK)) {
@@ -119,6 +124,7 @@ public class Board_0 extends AppCompatActivity {
             Toast.makeText(this, "글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
         }
         categorytitle.setText(categoryname);
+
         init();
     }
 
@@ -160,28 +166,29 @@ public class Board_0 extends AppCompatActivity {
         posttitlelist = new ArrayList<TextView>();
         postownerlist = new ArrayList<TextView>();
         for (int i = 0; i < 10; i++) {
+            //연습 닉네임을 이메일로
             postcontainer = findViewById(R.id.post0 + i);
-            postcontainer.removeAllViews();
+            //postcontainer.removeAllViews();
             //글번호
-            postno = new TextView(this);
+            postno = findViewById(R.id.postno0+i);
 
             postno.setTextSize(15);
             postno.setGravity(View.TEXT_ALIGNMENT_CENTER);
             postno.setLayoutParams(postnoparam);
             //글제목
-            posttitle = new TextView(this);
-
+            posttitle = findViewById(R.id.posttitle0+i);
             posttitle.setTextSize(15);
             posttitle.setLayoutParams(posttitleparam);
             //글작성자
-            postowner = new TextView(this);
-            postowner.setGravity(View.TEXT_ALIGNMENT_VIEW_END);
-            postowner.setLayoutParams(postownerparam);
+            postowner = findViewById(R.id.postowner0+i);
+           //post_text_owner.add(postowner);
+           // postowner.setGravity(View.TEXT_ALIGNMENT_VIEW_END);
+           // postowner.setLayoutParams(postownerparam);
 
                 if(postlist.get(i)!=null) {
                     postno.setText(postlist.get(i).getPostnum());
                     posttitle.setText(postlist.get(i).getPosttitle());
-                    postowner.setText(postlist.get(i).getPostowner());
+                    postowner.setText("");
                 }
                 else{
                     postno.setText("");
@@ -189,22 +196,38 @@ public class Board_0 extends AppCompatActivity {
                     postowner.setText("");
                 }
 
-
+            post_text_owner.add(postowner);
             //
             //컨테이너 추가부분.
-            postcontainer.addView(postno);
-            postcontainer.addView(posttitle);
-            postcontainer.addView(postowner);
+            //postcontainer.addView(postno);
+            //postcontainer.addView(posttitle);
+            //postcontainer.addView(postowner);
             postcontainer.setOnClickListener(listen_post);
 
             postnolist.add(postno);
-            posttitlelist.add(posttitle);
+           // posttitlelist.add(posttitle);
             postownerlist.add(postowner);
             postcontainerlist.add(postcontainer);
         }
         pagenavi.setTextSize(20);
         pagenavi.setText(PAGENUM+" OF "+PAGEMAXNUM);
+            FirebaseDatabase.getInstance().getReference().child("user").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(int x=0;x<10;x++){
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                 if(postviewlist.get(x).getPostowner().equals(snapshot.child("uid").getValue(Object.class).toString())){
+                                        post_text_owner.get(x).setText(snapshot.child("nickname").getValue(Object.class).toString());
+                                 }
 
+                            }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
     }
 
@@ -345,9 +368,10 @@ public class Board_0 extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     ValueEventListener getpostlistten=new ValueEventListener() {
+
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            ArrayList<Board_post> postviewlist=new ArrayList<>();
+            postviewlist=new ArrayList<>();
             SEARCHFLAG=0;
             int pagenum=PAGENUM;
             int i=0;//맥스페이지 설정
@@ -378,7 +402,7 @@ public class Board_0 extends AppCompatActivity {
                     else{
                         Object p_n=snapshot.child("postnum").getValue(Object.class);
                         Object p_t=snapshot.child("posttitle").getValue(Object.class);
-                        Object p_o=snapshot.child("postowner").getValue(Object.class);
+                        Object p_o=snapshot.child("postowneruid").getValue(Object.class);
                         if(p_t==null) p_t="";
                         if(p_n==null) p_n="";
                         if(p_o==null) p_o="";
@@ -404,7 +428,7 @@ public class Board_0 extends AppCompatActivity {
                             else{
                                 Object p_n=snapshot.child("postnum").getValue(Object.class);
                                 Object p_t=snapshot.child("posttitle").getValue(Object.class);
-                                Object p_o=snapshot.child("postowner").getValue(Object.class);
+                                Object p_o=snapshot.child("postowneruid").getValue(Object.class);
                                 if(p_t==null) p_t="";
                                 if(p_n==null) p_n="";
                                 if(p_o==null) p_o="";
@@ -431,6 +455,7 @@ public class Board_0 extends AppCompatActivity {
             //이제 view를 띄운다. 나중엔 업데이트뷰를 만들거임
             //Toast.makeText(getApplicationContext(),Integer.toString(PAGEMAXNUM),Toast.LENGTH_SHORT).show();
             //Toast.makeText(getApplicationContext(),postviewlist.get(0).getPostnum(),Toast.LENGTH_SHORT).show();
+
             creatview(postviewlist);
         }
 
@@ -442,7 +467,7 @@ public class Board_0 extends AppCompatActivity {
     ValueEventListener getsearchpostlistten=new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            ArrayList<Board_post> postviewlist=new ArrayList<>();
+            postviewlist=new ArrayList<>();
             SEARCHFLAG=1;
             int i=0;
             //스피너 설정과 입력값 가져오기
@@ -462,7 +487,7 @@ public class Board_0 extends AppCompatActivity {
                         if(snapshot.child("isnoname").getValue(Object.class).toString().equals("false")){//isnoname이 false->익명아닌애들만 검색
                             Object p_n=snapshot.child("postnum").getValue(Object.class);
                             Object p_t=snapshot.child("posttitle").getValue(Object.class);
-                            Object p_o=snapshot.child("postowner").getValue(Object.class);
+                            Object p_o=snapshot.child("postowneruid").getValue(Object.class);
                             if(p_t==null) p_t="";
                             if(p_n==null) p_n="";
                             if(p_o==null) p_o="";
@@ -483,7 +508,7 @@ public class Board_0 extends AppCompatActivity {
                         else{
                             Object p_n=snapshot.child("postnum").getValue(Object.class);
                             Object p_t=snapshot.child("posttitle").getValue(Object.class);
-                            Object p_o=snapshot.child("postowner").getValue(Object.class);
+                            Object p_o=snapshot.child("postowneruid").getValue(Object.class);
                             if(p_t==null) p_t="";
                             if(p_n==null) p_n="";
                             if(p_o==null) p_o="";

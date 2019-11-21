@@ -50,6 +50,7 @@ public class PostWrite extends AppCompatActivity {
     private GoogleSignInClient mSignInClient;
     private FirebaseAuth mAuth;
     static String email="";
+    static String uid="";
     static String categoryname="";
     protected Spinner spinner;
     protected ArrayAdapter<CharSequence> spinerAdapter;
@@ -184,6 +185,7 @@ public class PostWrite extends AppCompatActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                            Object usernickname= snapshot.child("nickname").getValue(Object.class);
                             username=usernickname.toString();
+                            uid=snapshot.child("uid").getValue(Object.class).toString();
                         }
                         categoryref=boardref.child(categoryname).getRef();
 
@@ -214,9 +216,11 @@ public class PostWrite extends AppCompatActivity {
                         postValue.put("postnum",Integer.toString(boarn+1));
                         postValue.put("posttitle",tx_write_title.getText().toString());
                         postValue.put("postowner",username);
+                        postValue.put("postowneruid",uid);
                         postValue.put("isnoname",tmp_share);
                         postValue.put("creattime",formatDate);
                         postValue.put("content",tx_write_content.getText().toString());
+
 
                         //push
                         categoryref=boardref.child(categoryname);
@@ -304,6 +308,7 @@ public class PostWrite extends AppCompatActivity {
                 //사용자 계정을 얻어온다.
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 email=account.getEmail();
+                uid=account.getId();
                 //account부터 접근이 가능한것.
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately

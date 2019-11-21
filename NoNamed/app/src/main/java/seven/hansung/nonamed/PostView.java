@@ -68,13 +68,19 @@ public class PostView  extends AppCompatActivity {
     String postnum;
     String categoryname;
     String email;
+    String useruid;
+    ArrayList<TextView>commentownerlist;
     ArrayList<LinearLayout> comment_frame_list;
+    ArrayList<String> comment_content_list;
     ArrayList<String> comment_no_list;
-    ArrayList<String>comment_owner_list;
-    String modifycommentowner;
+    ArrayList<String>comment_owneruid_list;
+    PostInfo post;
+    String modifycommentowneruid;
     String modifycommentcreattime;
     String modifycommentcontent;
     String usernickname;
+    int commentcount;
+    ArrayList<Comment_Info> commentlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +115,10 @@ public class PostView  extends AppCompatActivity {
         //롱클릭으로 수정 삭제 기능 추가할 예정.
         comment_frame_list=new ArrayList<>();
         comment_no_list=new ArrayList<>();
-        comment_owner_list=new ArrayList<>();
-         modifycommentowner="";
+        comment_content_list=new ArrayList<>();
+        comment_owneruid_list=new ArrayList<>();
+        commentownerlist=new ArrayList<>();
+         modifycommentowneruid="";
         modifycommentcreattime="";
         modifycommentcontent="";
         usernickname="";
@@ -127,6 +135,20 @@ public class PostView  extends AppCompatActivity {
         //해당 글 띄우기
         postreq.orderByChild("postnum").equalTo(postnum).addListenerForSingleValueEvent(getpost);
         //코멘트 띄우기
+        FirebaseDatabase.getInstance().getReference().child("user").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if(post.getPostowneruid().equals(snapshot.child("uid").getValue(Object.class).toString())){
+                            tx_view_post_owner.setText(snapshot.child("nickname").getValue(Object.class).toString());
+                        }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         Intent intent=getIntent();
         categoryname=intent.getStringExtra("categoryname");
         postnum=intent.getStringExtra("postnum");
@@ -197,6 +219,8 @@ public class PostView  extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                             usernickname=snapshot.child("nickname").getValue(Object.class).toString();
+                            useruid=snapshot.child("uid").getValue(Object.class).toString();
+
                         }
                     }
                     @Override
@@ -280,7 +304,6 @@ public class PostView  extends AppCompatActivity {
     ValueEventListener getpost=new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            PostInfo post=new PostInfo();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                 //작성자,번호,내용,익명여부,카테고리,시간,
                 post=snapshot.getValue(PostInfo.class);
@@ -306,7 +329,7 @@ public class PostView  extends AppCompatActivity {
     ValueEventListener getcommentlist=new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            ArrayList<Comment_Info> commentlist=new ArrayList<>();
+            commentlist=new ArrayList<>();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                 if(snapshot.child("category").getValue(Object.class).toString().equals(categoryname)){
                     Comment_Info comment= snapshot.getValue(Comment_Info.class);
@@ -318,6 +341,7 @@ public class PostView  extends AppCompatActivity {
             LinearLayout.LayoutParams comment_frame_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             LinearLayout.LayoutParams comment_no_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,1f);
             LinearLayout.LayoutParams comment_comment_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,5f);
+            commentcount=commentlist.size();
             for(int i=0;i<commentlist.size();i++){
                 comment_frame=new LinearLayout(getApplicationContext());
                 comment_frame.setLayoutParams(comment_frame_param);
@@ -345,18 +369,38 @@ public class PostView  extends AppCompatActivity {
                 commentowner.setTextSize(15);
                 commentowner.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 commentowner.setLayoutParams(comment_no_param);
+                commentownerlist.add(commentowner);
 
                 comment_frame.addView(commentno);
                 comment_frame.addView(commentcontent);
                 comment_frame.addView(commentowner);
                 comment_frame.setOnLongClickListener(commentmodifylistener);
                 comment_no_list.add(commentlist.get(i).getCreattime());
+                comment_content_list.add(commentcontent.getText().toString());
                 comment_frame_list.add(comment_frame);
-                comment_owner_list.add(commentowner.getText().toString());
+                comment_owneruid_list.add(commentowner.getText().toString());
+
 
                 layout_comment.addView(comment_frame);
 
             }
+            FirebaseDatabase.getInstance().getReference().child("user").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(int x=0;x<commentcount;x++){
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            if(commentlist.get(x).getCommentowneruid().equals(snapshot.child("uid").getValue(Object.class).toString())){
+                                commentownerlist.get(x).setText(snapshot.child("nickname").getValue(Object.class).toString());
+                            }
+
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
 
         @Override
@@ -369,9 +413,10 @@ public class PostView  extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                 usernickname=snapshot.child("nickname").getValue(Object.class).toString();
+                useruid=snapshot.child("uid").getValue(Object.class).toString();
             }
             //삭제권한이 있는경우
-            if(usernickname.equals(tx_view_post_owner.getText())){
+            if(useruid.equals(post.getPostowneruid())){
                 //포스트 넘버랑 카테고리 이중 확인
                 TextView numtx=findViewById(R.id.tx_view_post_no);
                 Intent intent=getIntent();
@@ -427,8 +472,9 @@ public class PostView  extends AppCompatActivity {
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         usernickname=snapshot.child("nickname").getValue(Object.class).toString();
+                        useruid=snapshot.child("uid").getValue(Object.class).toString();
                     }
-                    if(usernickname.equals(tx_view_post_owner.getText())){
+                    if(useruid.equals(post.getPostowneruid())){
                         Intent modifyintent=new Intent(getApplicationContext(),PostWrite.class);
                         modifyintent.putExtra("categoryname",categoryname);
                         modifyintent.putExtra("postmodify",true);
@@ -480,15 +526,16 @@ public class PostView  extends AppCompatActivity {
         public boolean onLongClick(View v) {
             for(int f=0;f<comment_frame_list.size();f++){
                 if(v.equals(comment_frame_list.get(f))){
-                    Toast.makeText(getApplicationContext(),""+comment_no_list.get(f)+""+comment_owner_list.get(f),Toast.LENGTH_SHORT).show();
-                    modifycommentowner=comment_owner_list.get(f);
+                    Toast.makeText(getApplicationContext(),""+comment_no_list.get(f)+""+comment_owneruid_list.get(f),Toast.LENGTH_SHORT).show();
+                    modifycommentowneruid=comment_owneruid_list.get(f);
                     modifycommentcreattime=comment_no_list.get(f);
+                    modifycommentcontent=comment_content_list.get(f);
                     FirebaseDatabase.getInstance().getReference().child("comment").orderByChild("creattime").equalTo(comment_no_list.get(f)).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 //만들어진 시간이랑 소유자가 맞으면(왜? 같은 사람이 1초안에 여러개를 올리긴 힘드니까 확률이 적음)
-                                if(snapshot.child("commentowner").getValue(Object.class).toString().equals(modifycommentowner)){
+                                if(snapshot.child("commentowneruid").getValue(Object.class).toString().equals(modifycommentowneruid)){
                                     modifycommentcontent=snapshot.child("content").getValue(Object.class).toString();
                                 }
                             }
@@ -507,7 +554,7 @@ public class PostView  extends AppCompatActivity {
                                     Log.v(TAG, "확인클릭");
                                     String value = et.getText().toString();
                                     for (DataSnapshot snapshot2 : dataSnapshot.getChildren()) {
-                                        if(snapshot2.child("commentowner").getValue(Object.class).toString().equals(usernickname))
+                                        if(snapshot2.child("commentowneruid").getValue(Object.class).toString().equals(useruid))
                                             snapshot2.child("content").getRef().setValue(value);
                                         else{
                                             Toast.makeText(getApplicationContext(),"수정권한이 없습니다!",Toast.LENGTH_LONG).show();
@@ -522,7 +569,7 @@ public class PostView  extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Log.v(TAG,"삭제클릭");
                                     for (DataSnapshot snapshot2 : dataSnapshot.getChildren()) {
-                                        if(snapshot2.child("commentowner").getValue(Object.class).toString().equals(usernickname)){
+                                        if(snapshot2.child("commentowneruid").getValue(Object.class).toString().equals(useruid)){
                                         snapshot2.getRef().setValue(null);
                                         }
                                         else{
