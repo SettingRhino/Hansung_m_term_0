@@ -1,3 +1,25 @@
+#### EOM-TJ-  
+##### 1127_notice
+##### 액션바 없애고 싶을시에 각 액티비티 onCreate에 이렇게 넣어주면 됩니다.
+##### 남겨둔 액션바, 상태바는 블랙으로 나중에 한꺼번에 통일할거니까 색 변경은 안하셔도 됩니다.
+```java 
+  protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
+        }
+```
+#### -EOM-TJ  
+#### EOM-TJ-  
+##### 1127_0 
+##### 회원가입시 중복검사후 텍스트 변경시 캐치 못하는 문제 수정.-> 텍스트 수정시 중복검사 다시해야함
+##### 레이아웃 프로토타입용 변경진행중[이미지 삽입 예정//] 
+#### -EOM-TJ  
+#### EOM-TJ-  
+##### 1126
+##### useruid를 이용한 자료 접근방법으로 바꾸면서 생긴 버그들 수정.
+##### 이미지 테스트 임시의 클래스 생성[마이페이지 시에 사용하고 제거요망] 
+##### storage사용을 위한 의존성 추가 수정.
+#### -EOM-TJ  
 #### LeeBH
 #### 11.25
 #### 기존 프로젝트에 일대일 채팅기능을 추가하여 업로드함
