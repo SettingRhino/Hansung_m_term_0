@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Charcterselect"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,24 +17,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WellCome">
-        </activity>
-        <activity android:name=".PwChange">
-        </activity>
-        <activity android:name=".SelectMenu">
-        </activity>
-        <activity android:name=".BoardCategory">
-        </activity>
-        <activity android:name=".MyPage">
-        </activity>
-        <activity android:name=".Chatting_Main">
-        </activity>
-        <activity android:name=".Board_0">
-        </activity>
-        <activity android:name=".PostWrite">
-        </activity>
-        <activity android:name=".PostView">
-        </activity>
+        <activity android:name=".WellCome"></activity>
+        <activity android:name=".PwChange"></activity>
+        <activity android:name=".SelectMenu"></activity>
+        <activity android:name=".BoardCategory"></activity>
+        <activity android:name=".MyPage"></activity>
+        <activity android:name=".Chatting_Main"></activity>
+        <activity android:name=".Board_0"></activity>
+        <activity android:name=".PostWrite"></activity>
+        <activity android:name=".PostView"></activity>
     </application>
 
 </manifest>

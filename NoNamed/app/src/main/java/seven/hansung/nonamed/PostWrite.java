@@ -60,7 +60,8 @@ public class PostWrite extends AppCompatActivity {
     protected Button bt_write_ok;
     ArrayList<String> spinner_arr;
     String tmp_share;
-
+    String num;
+    String useruid;
 
     int boarn;
     String username;
@@ -77,6 +78,7 @@ public class PostWrite extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         //1.Google로그임옵션 객체를 만든다
+        /*
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -88,18 +90,27 @@ public class PostWrite extends AppCompatActivity {
         //client로부터 인텐트를 불러와 엑티비티 시행->사용자의 데이터를 받아올수 있음
         //결과를 넘겨주면서 activity호출 코드값은 9001
         Intent signintent=mSignInClient.getSignInIntent();
-        startActivityForResult(signintent,RC_SIGN_IN);
+        startActivityForResult(signintent,RC_SIGN_IN);*/
         Intent intent=getIntent();
-        //데이터 구성시 사용
+        email=intent.getStringExtra("email");
         categoryname=intent.getStringExtra("categoryname");
+        useruid=intent.getStringExtra("uid");
+        //데이터 구성시 사용
+        Toast.makeText(getApplicationContext(),useruid+email+categoryname,Toast.LENGTH_SHORT).show();
+
         init();
 
     }
     @Override
     public void onBackPressed(){
-            Intent intent = new Intent(getApplicationContext(),Board_0.class);
-            intent.putExtra("categoryname",categoryname);
-        startActivity(intent);
+
+        Intent re=new Intent(PostWrite.this,Board_0.class);
+        re.putExtra("categoryname",categoryname);
+        re.putExtra("email",email);
+        re.putExtra("uid",useruid);
+
+        startActivity(new Intent(re));
+
     }
 
         protected void init(){
@@ -116,13 +127,13 @@ public class PostWrite extends AppCompatActivity {
             bt_write_ok.setOnClickListener(listen_ok);
 
             Intent intent=getIntent();
-            int num=intent.getIntExtra("postmodifynum",-1);
+            num=intent.getStringExtra("postnum");
             Boolean modifypost=intent.getBooleanExtra("postmodify",false);
             categoryname=intent.getStringExtra("categoryname");
-            if(modifypost&&num!=-1){
+            if(modifypost){
                 //있는 내용 띄우기->재작성->데이터베이스 수정[버튼리스너 다시.]
                 modifypostreq=FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
-                modifypostreq.orderByChild("postnum").equalTo(Integer.toString(num)).addListenerForSingleValueEvent(new ValueEventListener() {
+                modifypostreq.orderByChild("postnum").equalTo(num).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -151,9 +162,9 @@ public class PostWrite extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=getIntent();
-                int num=intent.getIntExtra("postmodifynum",-1);
+                num=intent.getStringExtra("postnum");
                 modifypostreq=FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
-                modifypostreq.orderByChild("postnum").equalTo(Integer.toString(num)).addListenerForSingleValueEvent(new ValueEventListener() {
+                modifypostreq.orderByChild("postnum").equalTo(num).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -162,8 +173,11 @@ public class PostWrite extends AppCompatActivity {
                             snapshot.child("content").getRef().setValue(modifycontenttxt.getText().toString());
                             snapshot.child("posttitle").getRef().setValue(modifytitletxt.getText().toString());
                         }
+
                         Intent boardintent=new Intent(getApplicationContext(),Board_0.class);
                         boardintent.putExtra("categoryname",categoryname);
+                        boardintent.putExtra("email",email);
+                        boardintent.putExtra("uid",useruid);
                         boardintent.putExtra("modifyOK",true);
                         startActivity(boardintent);
                     }
@@ -215,7 +229,6 @@ public class PostWrite extends AppCompatActivity {
                         postValue.put("category",categoryname);
                         postValue.put("postnum",Integer.toString(boarn+1));
                         postValue.put("posttitle",tx_write_title.getText().toString());
-                        postValue.put("postowner",username);
                         postValue.put("postowneruid",uid);
                         postValue.put("isnoname",tmp_share);
                         postValue.put("creattime",formatDate);
@@ -229,6 +242,8 @@ public class PostWrite extends AppCompatActivity {
                         keyref.setValue(postValue);
 
                         Intent boardintent=new Intent(getApplicationContext(),Board_0.class);
+                        boardintent.putExtra("email",email);
+                        boardintent.putExtra("uid",useruid);
                         boardintent.putExtra("categoryname",categoryname);
                         boardintent.putExtra("postOK",true);
                         startActivity(boardintent);
@@ -298,6 +313,7 @@ public class PostWrite extends AppCompatActivity {
         public void onCancelled(@NonNull DatabaseError databaseError) {
         }
     };
+    /*
     @Override//4.사용자 계정을 얻어온다.
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -308,7 +324,6 @@ public class PostWrite extends AppCompatActivity {
                 //사용자 계정을 얻어온다.
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 email=account.getEmail();
-                uid=account.getId();
                 //account부터 접근이 가능한것.
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -316,5 +331,5 @@ public class PostWrite extends AppCompatActivity {
                 // ...
             }
         }
-    }
+    }*/
 }

@@ -28,14 +28,16 @@ public class BoardCategory extends AppCompatActivity {
     LinearLayout categorymainframe;
     TextView categorytext;
     ArrayList<String> categorylist;
-
+    String uid="";
+    String email="";
     String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.boardcategory);
         Intent intent=getIntent();
-        username=intent.getStringExtra("username");
+        uid=intent.getStringExtra("uid");
+        email=intent.getStringExtra("email");
         database = FirebaseDatabase.getInstance().getReference();
         mcategoryRef = database.child("category");
         //카테고리 값 가져옴 categorylist
@@ -47,7 +49,12 @@ public class BoardCategory extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
-        startActivity(new Intent(this,SelectMenu.class));
+        Intent intent=new Intent(this,SelectMenu.class);
+        //유저네임을 보내줌.X
+        intent.putExtra("uid",uid);
+        intent.putExtra("email",email);
+        //intent.putExtra("username",username);
+        startActivity(intent);
     }
     View.OnClickListener Listen_boardcategory00=new View.OnClickListener() {
         @Override
@@ -57,6 +64,8 @@ public class BoardCategory extends AppCompatActivity {
             //Toast.makeText(BoardCategory.this, categoryname, Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(BoardCategory.this,Board_0.class);
             //유저네임을 보내줌.X
+            intent.putExtra("uid",uid);
+            intent.putExtra("email",email);
             intent.putExtra("categoryname",categoryname);
             //intent.putExtra("username",username);
             startActivity(intent);

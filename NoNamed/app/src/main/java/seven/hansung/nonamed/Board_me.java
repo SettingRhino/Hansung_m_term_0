@@ -47,7 +47,7 @@ import java.util.HashMap;
 import seven.hansung.nonamed.utility.Board_post;
 import seven.hansung.nonamed.utility.Spinnercreat;
 
-public class Board_0 extends AppCompatActivity {
+public class Board_me extends AppCompatActivity {
     //파이어베이스 참조객체 필요한것?-> board->해당 카테고리.
     DatabaseReference board_categoryreq;
     String uid;
@@ -86,7 +86,7 @@ public class Board_0 extends AppCompatActivity {
     ImageButton next5pagebtn;
     ImageButton pre5pagebtn;
     TextView pagenavi;
-
+    Intent intent;
 
 
 
@@ -95,12 +95,12 @@ public class Board_0 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board_base);
         post_text_owner=new ArrayList<>();
+        intent = getIntent();
         Intent intent=getIntent();
         uid=intent.getStringExtra("uid");
         email=intent.getStringExtra("email");
         categoryname = intent.getStringExtra("categoryname");
         categorytitle = findViewById(R.id.board_title);
-Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT).show();
         nextpagebtn=findViewById(R.id.nextpagebtn);
         next5pagebtn=findViewById(R.id.next5pagebtn);
         prepagebtn=findViewById(R.id.prepagebtn);
@@ -118,11 +118,7 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
     }
     @Override
     public void onBackPressed(){
-        Intent intent = new Intent(getApplicationContext(),BoardCategory.class);
-        intent.putExtra("categoryname", categoryname);
-        intent.putExtra("email",email);
-        intent.putExtra("uid",uid);
-        startActivity(intent);
+        startActivity(new Intent(getApplicationContext(),BoardCategory.class));
     }
     @Override
     protected void onResume() {
@@ -134,10 +130,10 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
 
         //board_categoryreq.addListenerForSingleValueEvent(getpostlist);
         //글쓰기 후 다시 돌아올경우.
-        if (getIntent().getBooleanExtra("postOK", postOK)) {
+        if (intent.getBooleanExtra("postOK", postOK)) {
             Toast.makeText(this, "글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
         }
-        if (getIntent().getBooleanExtra("modifyOK", postOK)) {
+        if (intent.getBooleanExtra("modifyOK", postOK)) {
             Toast.makeText(this, "글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
         }
         categorytitle.setText(categoryname);
@@ -162,7 +158,7 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
         //Toast.makeText(getApplicationContext(),boardnumlist.get(0),Toast.LENGTH_SHORT).show();
         //검색기능
 
-    //페이지 이동
+        //페이지 이동
         nextpagebtn.setOnClickListener(pagemovebtnlisten);
         next5pagebtn.setOnClickListener(pagemovebtnlisten);
         prepagebtn.setOnClickListener(pagemovebtnlisten);
@@ -198,20 +194,20 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
             posttitle.setLayoutParams(posttitleparam);
             //글작성자
             postowner = findViewById(R.id.postowner0+i);
-           //post_text_owner.add(postowner);
-           // postowner.setGravity(View.TEXT_ALIGNMENT_VIEW_END);
-           // postowner.setLayoutParams(postownerparam);
+            //post_text_owner.add(postowner);
+            // postowner.setGravity(View.TEXT_ALIGNMENT_VIEW_END);
+            // postowner.setLayoutParams(postownerparam);
 
-                if(postlist.get(i)!=null) {
-                    postno.setText(postlist.get(i).getPostnum());
-                    posttitle.setText(postlist.get(i).getPosttitle());
-                    postowner.setText("");
-                }
-                else{
-                    postno.setText("");
-                    posttitle.setText("");
-                    postowner.setText("");
-                }
+            if(postlist.get(i)!=null) {
+                postno.setText(postlist.get(i).getPostnum());
+                posttitle.setText(postlist.get(i).getPosttitle());
+                postowner.setText("");
+            }
+            else{
+                postno.setText("");
+                posttitle.setText("");
+                postowner.setText("");
+            }
 
             post_text_owner.add(postowner);
             //
@@ -222,32 +218,32 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
             postcontainer.setOnClickListener(listen_post);
 
             postnolist.add(postno);
-           // posttitlelist.add(posttitle);
+            // posttitlelist.add(posttitle);
             postownerlist.add(postowner);
             postcontainerlist.add(postcontainer);
         }
         pagenavi.setTextSize(20);
         pagenavi.setText(PAGENUM+" OF "+PAGEMAXNUM);
-            FirebaseDatabase.getInstance().getReference().child("user").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(int x=0;x<10;x++){
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                if(!postviewlist.get(x).getPostowner().equals("noname")){
-                                    if(postviewlist.get(x).getPostowner().equals(snapshot.child("uid").getValue(Object.class).toString())){
-                                            post_text_owner.get(x).setText(snapshot.child("nickname").getValue(Object.class).toString());
-                                 }
-                                }
-                                else
-                                    post_text_owner.get(x).setText("noname");
+        FirebaseDatabase.getInstance().getReference().child("user").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(int x=0;x<10;x++){
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if(!postviewlist.get(x).getPostowner().equals("noname")){
+                            if(postviewlist.get(x).getPostowner().equals(snapshot.child("uid").getValue(Object.class).toString())){
+                                post_text_owner.get(x).setText(snapshot.child("nickname").getValue(Object.class).toString());
                             }
+                        }
+                        else
+                            post_text_owner.get(x).setText("noname");
                     }
                 }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+            }
+        });
 
     }
 
@@ -285,14 +281,8 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
             board_categoryreq = FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
             if(SEARCHFLAG==0)
                 board_categoryreq.addValueEventListener(getpostlistten);
-            else{
-                if(spinner.getSelectedItem().toString().equals("글제목")||spinner.getSelectedItem().toString().equals("글번호"))
-                    FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef().addValueEventListener(getsearchpostlistten);
-                else
-                {
-                    FirebaseDatabase.getInstance().getReference().addValueEventListener(getsearchpostlisttenowner);
-                }
-            }
+            else
+                board_categoryreq.addValueEventListener(getsearchpostlistten);
         }
     };
 
@@ -318,11 +308,6 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
                     //1.Google로그임옵션 객체를 만든다
                     //client로부터 인텐트를 불러와 엑티비티 시행->사용자의 데이터를 받아올수 있음
                     //결과를 넘겨주면서 activity호출 코드값은 9001
-
-                    uid=getIntent().getStringExtra("uid");
-                    email=getIntent().getStringExtra("email");
-                    categoryname = getIntent().getStringExtra("categoryname");
-
                     Intent intent = new Intent(getApplicationContext(), PostView.class);
                     intent.putExtra("postowner", intentpostowner);
                     intent.putExtra("categoryname", categoryname);
@@ -349,8 +334,8 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
         public void onClick(View v) {
             PAGENUM=1;
             if(spinner.getSelectedItem().toString().equals("글제목")||spinner.getSelectedItem().toString().equals("글번호"))
-                 FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef().addValueEventListener(getsearchpostlistten);
-           else
+                FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef().addValueEventListener(getsearchpostlistten);
+            else
             {
                 FirebaseDatabase.getInstance().getReference().addValueEventListener(getsearchpostlisttenowner);
             }
@@ -386,9 +371,8 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
         int id = item.getItemId();
         if (id == R.id.board_action_write) {
             Intent intent = new Intent(this, PostWrite.class);
+
             intent.putExtra("categoryname", categoryname);
-            intent.putExtra("email",email);
-            intent.putExtra("uid",uid);
             startActivity(intent);
             return true;
         }
@@ -445,35 +429,35 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
             }
             else{
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                //해당 페이지의 게시글만 읽겠다.
-                //24 23222120191817161514 //13121110987654//
-                //작은 값(ex14)&&큰값(ex23)
+                    //해당 페이지의 게시글만 읽겠다.
+                    //24 23222120191817161514 //13121110987654//
+                    //작은 값(ex14)&&큰값(ex23)
                     if(i>=dataSnapshot.getChildrenCount()-10*(pagenum)&&i<dataSnapshot.getChildrenCount()-10*(pagenum-1)){
                         Object p_noname=snapshot.child("isnoname").getValue(Object.class);
-                            if(p_noname.toString().equals("true")){
-                                Object p_n=snapshot.child("postnum").getValue(Object.class);
-                                Object p_t=snapshot.child("posttitle").getValue(Object.class);
-                                if(p_t==null) p_t="";
-                                if(p_n==null) p_n="";
-                                postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),"noname"));
-                            }
-                            else{
-                                Object p_n=snapshot.child("postnum").getValue(Object.class);
-                                Object p_t=snapshot.child("posttitle").getValue(Object.class);
-                                Object p_o=snapshot.child("postowneruid").getValue(Object.class);
-                                if(p_t==null) p_t="";
-                                if(p_n==null) p_n="";
-                                if(p_o==null) p_o="";
+                        if(p_noname.toString().equals("true")){
+                            Object p_n=snapshot.child("postnum").getValue(Object.class);
+                            Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                            if(p_t==null) p_t="";
+                            if(p_n==null) p_n="";
+                            postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),"noname"));
+                        }
+                        else{
+                            Object p_n=snapshot.child("postnum").getValue(Object.class);
+                            Object p_t=snapshot.child("posttitle").getValue(Object.class);
+                            Object p_o=snapshot.child("postowneruid").getValue(Object.class);
+                            if(p_t==null) p_t="";
+                            if(p_n==null) p_n="";
+                            if(p_o==null) p_o="";
 
-                                postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),p_o.toString()));
+                            postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),p_o.toString()));
                         }
 
                     }
-                //해당 페이지가 아닌 순서는 그냥 null
+                    //해당 페이지가 아닌 순서는 그냥 null
                     else{
 
                     }
-                i++;
+                    i++;
 
                 }
             }
@@ -483,6 +467,7 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
             for(int j= postviewlist.size();j<10;j++){
                 postviewlist.add(j,new Board_post("","",""));
             }
+
             creatview(postviewlist);
         }
 
@@ -497,7 +482,6 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             TextView v=findViewById(R.id.tx_post_search);
             ArrayList<String> uidlist=new ArrayList<>();
-            postviewlist.clear();
             //포함되는 애들 가져옴
             for (DataSnapshot snapshot : dataSnapshot.child("user").getChildren()) {
                 if(snapshot.child("nickname").getValue(Object.class).toString().contains(v.getText().toString()))
@@ -509,14 +493,14 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
                 for(int h=0;h<uidlist.size();h++){
                     if(snapshot.child("postowneruid").getValue(Object.class).toString().equals(uidlist.get(h))){
                         Object p_noname=snapshot.child("isnoname").getValue(Object.class);
-                        if(p_noname.toString().equals("false")){
-                            /*Object p_n=snapshot.child("postnum").getValue(Object.class);
+                        if(p_noname.toString().equals("true")){
+                            Object p_n=snapshot.child("postnum").getValue(Object.class);
                             Object p_t=snapshot.child("posttitle").getValue(Object.class);
                             if(p_t==null) p_t="";
                             if(p_n==null) p_n="";
                             postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),"noname"));
                         }
-                        else{*/
+                        else{
                             Object p_n=snapshot.child("postnum").getValue(Object.class);
                             Object p_t=snapshot.child("posttitle").getValue(Object.class);
                             Object p_o=snapshot.child("postowneruid").getValue(Object.class);
@@ -558,7 +542,6 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
                 }
 
             }
-
             creatview(postviewlist);
         }
 

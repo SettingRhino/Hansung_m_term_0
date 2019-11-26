@@ -3,12 +3,15 @@ package seven.hansung.nonamed;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -67,6 +70,7 @@ public class PostView  extends AppCompatActivity {
     private GoogleSignInClient mSignInClient;
     String postnum;
     String categoryname;
+    String postowner;
     String email;
     String useruid;
     ArrayList<TextView>commentownerlist;
@@ -81,6 +85,11 @@ public class PostView  extends AppCompatActivity {
     String usernickname;
     int commentcount;
     ArrayList<Comment_Info> commentlist;
+    ArrayList<String> comment_real_owner;
+    LinearLayout.LayoutParams comment_frame_param;
+    LinearLayout.LayoutParams comment_no_param;
+    ViewGroup.LayoutParams lp;
+    LinearLayout.LayoutParams comment_comment_param;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,35 +104,38 @@ public class PostView  extends AppCompatActivity {
         postremovebtn.setOnClickListener(removepost);
         postmodifybtn=findViewById(R.id.postmodifybtn);
         postmodifybtn.setOnClickListener(modifypost);
-        //제거시 필요한 동작- 포스트 삭제, 덧글 모두 삭제, 후 게시판으로
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        //2.googleAPI클라이언트 생성
-        mSignInClient= GoogleSignIn.getClient(this,gso);
-        //여기서는 주소만 가져옴 가입 x
-        mAuth = FirebaseAuth.getInstance();
-        //client로부터 인텐트를 불러와 엑티비티 시행->사용자의 데이터를 받아올수 있음
-        //결과를 넘겨주면서 activity호출 코드값은 9001
-        Intent signintent=mSignInClient.getSignInIntent();
-        startActivityForResult(signintent,RC_SIGN_IN);
         Intent intent=getIntent();
         categoryname=intent.getStringExtra("categoryname");
         postnum=intent.getStringExtra("postnum");
-      //  Toast.makeText(this,postnum,Toast.LENGTH_LONG).show();
-        //롱클릭으로 수정 삭제 기능 추가할 예정.
+        postowner=intent.getStringExtra("postowner");
+        email=intent.getStringExtra("email");
+        useruid=intent.getStringExtra("uid");
+        Toast.makeText(this,useruid,Toast.LENGTH_SHORT).show();
         comment_frame_list=new ArrayList<>();
         comment_no_list=new ArrayList<>();
         comment_content_list=new ArrayList<>();
         comment_owneruid_list=new ArrayList<>();
         commentownerlist=new ArrayList<>();
-         modifycommentowneruid="";
+        comment_real_owner=new ArrayList<>();
+        modifycommentowneruid="";
         modifycommentcreattime="";
         modifycommentcontent="";
         usernickname="";
+        comment_frame_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        comment_no_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,1f);
+        comment_comment_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,5f);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //제거시 필요한 동작- 포스트 삭제, 덧글 모두 삭제, 후 게시판으로
+        //  Toast.makeText(this,postnum,Toast.LENGTH_LONG).show();
+        //롱클릭으로 수정 삭제 기능 추가할 예정.
+
         init();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -131,65 +143,16 @@ public class PostView  extends AppCompatActivity {
     }
 
     protected void  init(){
+        Intent intent=getIntent();
+        categoryname=intent.getStringExtra("categoryname");
+        postnum=intent.getStringExtra("postnum");
         postreq= FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
         //해당 글 띄우기
         postreq.orderByChild("postnum").equalTo(postnum).addListenerForSingleValueEvent(getpost);
         //코멘트 띄우기
-        FirebaseDatabase.getInstance().getReference().child("user").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        if(post.getPostowneruid().equals(snapshot.child("uid").getValue(Object.class).toString())){
-                            tx_view_post_owner.setText(snapshot.child("nickname").getValue(Object.class).toString());
-                        }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        Intent intent=getIntent();
-        categoryname=intent.getStringExtra("categoryname");
-        postnum=intent.getStringExtra("postnum");
         commentreq=FirebaseDatabase.getInstance().getReference().child("comment").getRef();
         commentreq.orderByChild("postnum").equalTo(postnum).addValueEventListener(getcommentlist);
-        /*
-        //코멘트여러개 반복구간
-        layout_comment=findViewById(R.id.layout_comment);
 
-        LinearLayout.LayoutParams comment_no_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,1f);
-        LinearLayout.LayoutParams comment_comment_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,5f);
-
-        comment_frame=new LinearLayout(getApplicationContext());
-        comment_frame.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        comment_frame.setOrientation(LinearLayout.HORIZONTAL);
-
-        commentno=new TextView(this);
-        commentno.setText("no"+0+"");
-        commentno.setTextSize(15);
-        commentno.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        commentno.setLayoutParams(comment_no_param);
-
-        commentcontent=new TextView(this);
-        commentcontent.setText("글내용"+0+"");
-        commentcontent.setTextSize(15);
-        commentcontent.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        commentcontent.setLayoutParams(comment_comment_param);
-
-        commentowner=new TextView(this);
-        commentowner.setText("작성자"+0+"");
-        commentowner.setTextSize(15);
-        commentowner.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        commentowner.setLayoutParams(comment_no_param);
-
-        comment_frame.addView(commentno);
-        comment_frame.addView(commentcontent);
-        comment_frame.addView(commentowner);
-
-        layout_comment.addView(comment_frame);
-        //여러개 반복구간끝
-*/
         bt_comment_ok=findViewById(R.id.bt_comment_ok);
         bt_comment_ok.setOnClickListener(listen_comment_ok);
 
@@ -202,44 +165,11 @@ public class PostView  extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference().child("user").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(pushcomment);
         }
     };
-    @Override//4.사용자 계정을 얻어온다.
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                //사용자 계정을 얻어온다.
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                email=account.getEmail();
-                //account부터 접근이 가능한것.[접근만. 아직 우리쪽에 등록된것 아님.]
-                //데이터 베이스 조회
-                FirebaseDatabase.getInstance().getReference().child("user").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                            usernickname=snapshot.child("nickname").getValue(Object.class).toString();
-                            useruid=snapshot.child("uid").getValue(Object.class).toString();
-
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-               // Toast.makeText(getApplicationContext(),email,Toast.LENGTH_LONG).show();
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-                // ...
-            }
-        }
-        else{}
-    }
     ValueEventListener pushcomment=new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            comment_noname=findViewById(R.id.comment_noname);
+            tx_comment_write=findViewById(R.id.tx_comment_write);
             String commentuser="";
             String commentowneruid="";
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -247,11 +177,13 @@ public class PostView  extends AppCompatActivity {
                 Object uid= snapshot.child("uid").getValue(Object.class);
                 commentuser=nick.toString();
                 commentowneruid=uid.toString();
+                useruid=uid.toString();
+
+
             }
             //게시글넘버,익명여부,작성자,시간,내용을 저장함.
             //일단 테스트 내용.익명여부만 체크
-            comment_noname=findViewById(R.id.comment_noname);
-            tx_comment_write=findViewById(R.id.tx_comment_write);
+
             String noname;
             if(comment_noname.isChecked())
                 noname="true";
@@ -281,7 +213,7 @@ public class PostView  extends AppCompatActivity {
             // 코멘트 시간 코멘트 내용. 코멘트오너 코멘트익명여부 .
             commenttValue.put("creattime",formatDate);
             commenttValue.put("content",tx_comment_write.getText().toString());
-            commenttValue.put("commentowner",commentuser);
+            //commenttValue.put("commentowner",commentuser);
             commenttValue.put("commentisnonamed",noname);
             commenttValue.put("commentowneruid",commentowneruid);
             commenttValue.put("category",getIntent().getStringExtra("categoryname"));
@@ -293,7 +225,23 @@ public class PostView  extends AppCompatActivity {
             DatabaseReference keyref=commentreq.child(key);
             keyref.setValue(commenttValue);
             tx_comment_write.setText("");
+
             Toast.makeText(getApplicationContext(),"등록완료",Toast.LENGTH_SHORT).show();
+
+            Intent intent=getIntent();
+            categoryname=intent.getStringExtra("categoryname");
+            postnum=intent.getStringExtra("postnum");
+            postowner=intent.getStringExtra("postowner");
+            email=intent.getStringExtra("email");
+            useruid=intent.getStringExtra("uid");
+            Intent re=new Intent(PostView.this,PostView.class);
+            re.putExtra("categoryname",categoryname);
+            re.putExtra("postnum",postnum);
+            re.putExtra("postowner",postowner);
+            re.putExtra("email",email);
+            re.putExtra("uid",useruid);
+
+            startActivity(new Intent(re));
         }
 
         @Override
@@ -309,9 +257,9 @@ public class PostView  extends AppCompatActivity {
                 post=snapshot.getValue(PostInfo.class);
             }
             if(post.getIsnoname().equals("true"))
-                tx_view_post_owner.setText("nonamed");
+                tx_view_post_owner.setText("noname");
             else
-                tx_view_post_owner.setText(post.getPostowner());
+                tx_view_post_owner.setText(postowner);
             tx_view_post_no.setText(post.getPostnum());
             tx_view_post_time.setText(post.getCreattime());
             tx_view_post_content.setText(post.getContent());
@@ -338,10 +286,9 @@ public class PostView  extends AppCompatActivity {
             }
             layout_comment=findViewById(R.id.layout_comment);
             layout_comment.removeAllViews();
-            LinearLayout.LayoutParams comment_frame_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            LinearLayout.LayoutParams comment_no_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,1f);
-            LinearLayout.LayoutParams comment_comment_param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,5f);
+
             commentcount=commentlist.size();
+
             for(int i=0;i<commentlist.size();i++){
                 comment_frame=new LinearLayout(getApplicationContext());
                 comment_frame.setLayoutParams(comment_frame_param);
@@ -361,13 +308,16 @@ public class PostView  extends AppCompatActivity {
 
                 commentowner=new TextView(getApplicationContext());
                 if(commentlist.get(i).getCommentisnonamed().equals("true")){
-                    commentowner.setText("nonamed");
+                    commentowner.setText("noname");
                 }
                 else{
-                    commentowner.setText(commentlist.get(i).getCommentowner());
+                    if(comment_real_owner.size()>i){
+                        commentowner.setText(comment_real_owner.get(i));}
+                    else
+                        commentowner.setText("");
                 }
                 commentowner.setTextSize(15);
-                commentowner.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                commentowner.setGravity(Gravity.CENTER_VERTICAL|Gravity.END);
                 commentowner.setLayoutParams(comment_no_param);
                 commentownerlist.add(commentowner);
 
@@ -387,10 +337,17 @@ public class PostView  extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference().child("user").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(int x=0;x<commentcount;x++){
+                    comment_real_owner=new ArrayList<>();
+                    for(int x=0;x<commentlist.size();x++){
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             if(commentlist.get(x).getCommentowneruid().equals(snapshot.child("uid").getValue(Object.class).toString())){
-                                commentownerlist.get(x).setText(snapshot.child("nickname").getValue(Object.class).toString());
+                                comment_real_owner.add(snapshot.child("nickname").getValue(Object.class).toString());
+                                if(commentlist.get(x).getCommentisnonamed().equals("true")){
+                                    commentownerlist.get(x).setText("noname");
+                                }
+                                else{
+                                    commentownerlist.get(x).setText(snapshot.child("nickname").getValue(Object.class).toString());
+                                }
                             }
 
                         }
@@ -408,6 +365,7 @@ public class PostView  extends AppCompatActivity {
 
         }
     };
+
     ValueEventListener removepost_comment=new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -450,7 +408,11 @@ public class PostView  extends AppCompatActivity {
                     }
                 });
                 Intent backintent=new Intent(getApplicationContext(),Board_0.class);
-                backintent.putExtra("categoryname",categoryname);
+                backintent.putExtra("postowner", postowner);
+                backintent.putExtra("categoryname", categoryname);
+                backintent.putExtra("postnum",postnum);
+                backintent.putExtra("email",email);
+                backintent.putExtra("uid",useruid);
                 startActivity(backintent);
             }
             else{
@@ -472,14 +434,18 @@ public class PostView  extends AppCompatActivity {
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         usernickname=snapshot.child("nickname").getValue(Object.class).toString();
-                        useruid=snapshot.child("uid").getValue(Object.class).toString();
+                        //useruid=snapshot.child("uid").getValue(Object.class).toString();
                     }
                     if(useruid.equals(post.getPostowneruid())){
                         Intent modifyintent=new Intent(getApplicationContext(),PostWrite.class);
-                        modifyintent.putExtra("categoryname",categoryname);
+
+                        modifyintent.putExtra("postowner", postowner);
+                        modifyintent.putExtra("categoryname", categoryname);
+                        modifyintent.putExtra("postnum",postnum);
+                        modifyintent.putExtra("email",email);
+                        modifyintent.putExtra("uid",useruid);
                         modifyintent.putExtra("postmodify",true);
-                        TextView numtx=findViewById(R.id.tx_view_post_no);
-                        modifyintent.putExtra("postmodifynum",Integer.parseInt(numtx.getText().toString()));
+
                         startActivity(modifyintent);
                     }
                     else{
@@ -515,7 +481,6 @@ public class PostView  extends AppCompatActivity {
                             //이벤트
                         }
                     });
-
             AlertDialog dialog = builder.create();    // 알림창 객체 생성
             dialog.show();
 
@@ -557,7 +522,7 @@ public class PostView  extends AppCompatActivity {
                                         if(snapshot2.child("commentowneruid").getValue(Object.class).toString().equals(useruid))
                                             snapshot2.child("content").getRef().setValue(value);
                                         else{
-                                            Toast.makeText(getApplicationContext(),"수정권한이 없습니다!",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(),"수정권한이 없습니다!"+useruid,Toast.LENGTH_LONG).show();
                                         }
                                     }
                                     dialog.dismiss();     //닫기
@@ -570,10 +535,10 @@ public class PostView  extends AppCompatActivity {
                                     Log.v(TAG,"삭제클릭");
                                     for (DataSnapshot snapshot2 : dataSnapshot.getChildren()) {
                                         if(snapshot2.child("commentowneruid").getValue(Object.class).toString().equals(useruid)){
-                                        snapshot2.getRef().setValue(null);
+                                            snapshot2.getRef().setValue(null);
                                         }
                                         else{
-                                            Toast.makeText(getApplicationContext(),"수정권한이 없습니다!",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(),"삭제권한이 없습니다!",Toast.LENGTH_LONG).show();
                                         }
                                     }
                                     dialog.dismiss();     //닫기
@@ -602,5 +567,15 @@ public class PostView  extends AppCompatActivity {
             return false;
         }
     };
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(getApplicationContext(),Board_0.class);
+        intent.putExtra("postowner", postowner);
+        intent.putExtra("categoryname", categoryname);
+        intent.putExtra("postnum",postnum);
+        intent.putExtra("email",email);
+        intent.putExtra("uid",useruid);
+        startActivity(intent);
+    }
 
 }
