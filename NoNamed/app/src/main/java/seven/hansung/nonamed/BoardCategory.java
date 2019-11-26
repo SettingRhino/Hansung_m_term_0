@@ -2,9 +2,11 @@ package seven.hansung.nonamed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ public class BoardCategory extends AppCompatActivity {
     String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.boardcategory);
         Intent intent=getIntent();
@@ -80,12 +83,13 @@ public class BoardCategory extends AppCompatActivity {
                 categorylist.add(str.toString());
             }
             categorymainframe=findViewById(R.id.categorymainframe);
-            LinearLayout.LayoutParams categoryparam=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams categoryparam=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200,1);
             for(int i=0;i<categorylist.size();i++){
                 categorytext=new TextView(getApplicationContext());
                 categorytext.setText(categorylist.get(i));
                 categorytext.setTextSize(35);
-                categorytext.setGravity(Gravity.CENTER_HORIZONTAL);
+                categorytext.setTextColor(Color.WHITE);
+                categorytext.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
                 categorytext.setLayoutParams(categoryparam);
                 categorytext.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.textviewbottomsolid));
                 categorytext.setOnClickListener(Listen_boardcategory00);

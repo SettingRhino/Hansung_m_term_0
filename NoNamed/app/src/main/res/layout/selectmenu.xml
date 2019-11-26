@@ -4,68 +4,67 @@
     android:layout_height="match_parent"
     android:background="#e6ffe6">
 
-    <TextView
-        android:id="@+id/appName1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="bottom|center_horizontal"
-        android:textColor="#808000"
-        android:text="이름없음"
-        android:textSize="45sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="bottom|center_horizontal"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/bt_go_Board"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="30dp"
-            android:background="#cce6ff"
-            android:text="게시판"
-            android:textSize="40dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
+        android:layout_weight="5"
         android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/bt_go_Mypage"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="#cce6ff"
-            android:textSize="20dp"
-            android:text="나의공간" />
-
-        <Button
-            android:id="@+id/bt_go_Chatting"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="30dp"
-            android:layout_weight="1"
-            android:background="#cce6ff"
-            android:textSize="20dp"
-            android:text="채팅" />
 
         <Button
             android:id="@+id/imagetest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="imagetest" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_go_Board"
+                android:layout_width="270dp"
+                android:layout_height="60dp"
+                android:background="#cce6ff"
+                android:text="게시판"
+                android:textSize="40dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_go_Chatting"
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="15dp"
+                android:background="#cce6ff"
+                android:text="채팅"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/bt_go_Mypage"
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="15dp"
+                android:background="#cce6ff"
+                android:text="나의공간"
+                android:textSize="20dp" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

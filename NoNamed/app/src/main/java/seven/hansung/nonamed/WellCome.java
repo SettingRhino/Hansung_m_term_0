@@ -2,6 +2,8 @@ package seven.hansung.nonamed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -53,6 +55,17 @@ public class WellCome extends AppCompatActivity implements View.OnClickListener 
         overlapbtn=findViewById(R.id.overlapbtn);
         overlapbtn.setOnClickListener(this);
         nicknametx=findViewById(R.id.nickname);
+        nicknametx.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                overlapcheckflag=0;
+            }
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
         signupbtn.setOnClickListener(this);
         //1.Google로그임옵션 객체를 만든다
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -163,30 +176,32 @@ public class WellCome extends AppCompatActivity implements View.OnClickListener 
         String nickname=nicknametx.getText().toString();
         database = FirebaseDatabase.getInstance().getReference();
         userref = database.child("user").getRef();
-        userref.orderByChild("nickname").equalTo(nickname).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String overnick="";
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Object nick= snapshot.child("nickname").getValue(Object.class);
-                    overnick=nick.toString();
+        if(nickname.length()>20||nickname.length()<1)//글자가 1이하거나 20이상이면 안됨
+        {
+            Toast.makeText(getApplicationContext(),"글자수는 1~20사이로 설정해주세요.",Toast.LENGTH_LONG).show();
+        }else {
+            userref.orderByChild("nickname").equalTo(nickname).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String overnick = "";
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Object nick = snapshot.child("nickname").getValue(Object.class);
+                        overnick = nick.toString();
+                    }
+                    TextView v = findViewById(R.id.nickname);
+                    if (overnick.equals(v.getText().toString())) {
+                        Toast.makeText(getApplicationContext(), "중복", Toast.LENGTH_LONG).show();
+                        overlapcheckflag = 0;
+                    } else {
+                        Toast.makeText(getApplicationContext(), "중복X", Toast.LENGTH_LONG).show();
+                        overlapcheckflag = 1;
+                    }
                 }
-                TextView v=findViewById(R.id.nickname);
-                if(overnick.equals(v.getText().toString())){
-                    Toast.makeText(getApplicationContext(),"중복",Toast.LENGTH_LONG).show();
-                    overlapcheckflag=0;
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
-                else{
-                    Toast.makeText(getApplicationContext(),"중복X",Toast.LENGTH_LONG).show();
-                    overlapcheckflag=1;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+            });
+        }
     }
     @Override
     public void onClick(View v) {
