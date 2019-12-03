@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SelectMenu extends AppCompatActivity {
-    protected Button bt_go_Board;
-    protected Button bt_go_Chatting;
-    protected Button bt_go_Mypage;
+    protected ImageButton bt_go_Board;
+    protected ImageButton bt_go_Chatting;
+    protected ImageButton bt_go_Mypage;
     Button test;
     String uid="";
     String email="";

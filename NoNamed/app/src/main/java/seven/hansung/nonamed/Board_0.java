@@ -1,6 +1,7 @@
 package seven.hansung.nonamed;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -171,9 +172,11 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
 
         spinner = findViewById(R.id.board_search_spinner);
         spinnercraet = new Spinnercreat();
+
         spinerAdapter = spinnercraet.creatAdapter(spinerAdapter, R.array.board_search_spinner, this);
         spinner.setAdapter(spinerAdapter);
         spinner.setOnItemSelectedListener(Spinner_select);
+
     }
 
     //이하 리스너 혹은 다른 함수
@@ -192,12 +195,15 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
             postno.setTextSize(15);
             postno.setGravity(View.TEXT_ALIGNMENT_CENTER);
             postno.setLayoutParams(postnoparam);
+            postno.setTextColor(Color.WHITE);
             //글제목
             posttitle = findViewById(R.id.posttitle0+i);
             posttitle.setTextSize(15);
             posttitle.setLayoutParams(posttitleparam);
+            posttitle.setTextColor(Color.WHITE);
             //글작성자
             postowner = findViewById(R.id.postowner0+i);
+            postowner.setTextColor(Color.WHITE);
            //post_text_owner.add(postowner);
            // postowner.setGravity(View.TEXT_ALIGNMENT_VIEW_END);
            // postowner.setLayoutParams(postownerparam);
@@ -362,6 +368,9 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             searchspinner = spinner.getSelectedItem().toString();
+            ((TextView)spinner.getChildAt(0)).setTextColor(Color.WHITE);
+
+          //  ((TextView)parent.getChildAt(position)).setTextColor(Color.WHITE);
             // 테스트용
             // Toast.makeText(getApplicationContext(),tmp_share,Toast.LENGTH_SHORT).show();
         }

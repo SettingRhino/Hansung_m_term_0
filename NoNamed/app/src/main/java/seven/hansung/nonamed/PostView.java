@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,9 +63,9 @@ public class PostView  extends AppCompatActivity {
     protected TextView commentowner;
     protected EditText tx_comment_write;
     protected CheckBox comment_noname;
-    protected Button bt_comment_ok;
-    Button postremovebtn;
-    Button postmodifybtn;
+    protected ImageButton bt_comment_ok;
+    ImageButton postremovebtn;
+    ImageButton postmodifybtn;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "GoogleActivity";
     private FirebaseAuth mAuth;
@@ -297,18 +298,21 @@ public class PostView  extends AppCompatActivity {
                 comment_frame.setOrientation(LinearLayout.HORIZONTAL);
 
                 commentno=new TextView(getApplicationContext());
+                commentno.setTextColor(Color.WHITE);
                 commentno.setText(commentlist.get(i).getCreattime().substring(5,10));
                 commentno.setTextSize(15);
                 commentno.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 commentno.setLayoutParams(comment_no_param);
 
                 commentcontent=new TextView(getApplicationContext());
+                commentcontent.setTextColor(Color.WHITE);
                 commentcontent.setText(commentlist.get(i).getContent());
                 commentcontent.setTextSize(15);
                 commentcontent.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 commentcontent.setLayoutParams(comment_comment_param);
 
                 commentowner=new TextView(getApplicationContext());
+                commentowner.setTextColor(Color.WHITE);
                 if(commentlist.get(i).getCommentisnonamed().equals("true")){
                     commentowner.setText("noname");
                 }

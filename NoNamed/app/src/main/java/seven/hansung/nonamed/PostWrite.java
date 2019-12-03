@@ -1,6 +1,7 @@
 package seven.hansung.nonamed;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,7 +60,7 @@ public class PostWrite extends AppCompatActivity {
     protected EditText tx_write_title;
     protected EditText tx_write_content;
     protected CheckBox isnoname;
-    protected Button bt_write_ok;
+    protected ImageButton bt_write_ok;
     ArrayList<String> spinner_arr;
     String tmp_share;
     String num;
@@ -265,6 +267,7 @@ public class PostWrite extends AppCompatActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             //데이터 구성시 사용
             categoryname = spinner_arr.get(position);
+            ((TextView)spinner.getChildAt(0)).setTextColor(Color.WHITE);
 
         }
         @Override

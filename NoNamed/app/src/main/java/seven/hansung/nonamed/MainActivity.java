@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference database;
     DatabaseReference userref;
     private FirebaseAuth mAuth;
-    protected Button bt_Wcome;
+    protected ImageButton bt_Wcome;
     static String email="";
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "GoogleActivity";

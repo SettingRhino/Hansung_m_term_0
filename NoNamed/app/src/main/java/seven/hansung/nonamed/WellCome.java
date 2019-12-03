@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +38,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WellCome extends AppCompatActivity implements View.OnClickListener {
-    Button signupbtn;
-    Button overlapbtn;
+    ImageButton signupbtn;
+    ImageButton overlapbtn;
     EditText nicknametx;
     DatabaseReference database;
     DatabaseReference userref;

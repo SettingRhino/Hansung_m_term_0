@@ -11,6 +11,7 @@
         android:id="@+id/LoginMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#000000"
         android:orientation="vertical">
 
         <LinearLayout
@@ -24,19 +25,21 @@
                 android:id="@+id/appName0"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="이름없음"
-                android:textColor="#808000"
                 android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:text=""
+                android:textColor="#808000"
                 android:textSize="45sp" />
 
             <TextView
                 android:id="@+id/notipy"
-                android:textSize="25sp"
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text=" 안녕하세요!  반갑습니다!\n\n 자유로운 커뮤니티를 \n 지향하는 이름없음입니다 \n\n google계정으로 회원등록 후 \n 이용해주세요." />
+                android:text=" 안녕하세요!  반갑습니다!\n\n 자유로운 커뮤니티를 \n 지향하는 이름없음입니다 \n\n google계정으로 회원등록 후 \n 이용해주세요."
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -44,9 +47,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
+                android:id="@+id/bt_Wcome"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center|center_horizontal"
+                android:layout_margin="15dp"
+                android:background="#000000"
+                app:srcCompat="@color/colorAccent" />
+
+            <!--<Button
                 android:id="@+id/bt_Wcome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +67,7 @@
                 android:background="#cce6ff"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="회원가입"
-                android:textSize="36sp" />
+                android:textSize="36sp" />-->
 
         </LinearLayout>
     </LinearLayout>
