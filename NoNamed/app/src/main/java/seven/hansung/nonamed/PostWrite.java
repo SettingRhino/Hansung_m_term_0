@@ -60,7 +60,7 @@ public class PostWrite extends AppCompatActivity {
     protected EditText tx_write_title;
     protected EditText tx_write_content;
     protected CheckBox isnoname;
-    protected ImageButton bt_write_ok;
+    protected Button bt_write_ok;
     ArrayList<String> spinner_arr;
     String tmp_share;
     String num;
@@ -100,7 +100,7 @@ public class PostWrite extends AppCompatActivity {
         categoryname=intent.getStringExtra("categoryname");
         useruid=intent.getStringExtra("uid");
         //데이터 구성시 사용
-        Toast.makeText(getApplicationContext(),useruid+email+categoryname,Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(),useruid+email+categoryname,Toast.LENGTH_SHORT).show();
 
         init();
 
@@ -143,7 +143,7 @@ public class PostWrite extends AppCompatActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Object modifycontent=snapshot.child("content").getValue(Object.class);
                             Object modifyposttitle=snapshot.child("posttitle").getValue(Object.class);
-                            Toast.makeText(getApplicationContext(),modifycontent.toString(),Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(),modifycontent.toString(),Toast.LENGTH_LONG).show();
                             TextView modifycontenttxt=findViewById(R.id.tx_write_content);
                             TextView modifytitletxt=findViewById(R.id.tx_write_title);
                             modifycontenttxt.setText(modifycontent.toString());
@@ -196,6 +196,9 @@ public class PostWrite extends AppCompatActivity {
         View.OnClickListener listen_ok=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(tx_write_title.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(),"침묵은 표현되지 않습니다.",Toast.LENGTH_SHORT).show();
+                }else{
                 userref=database.child("user").getRef();
                 userref.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -259,6 +262,7 @@ public class PostWrite extends AppCompatActivity {
                     }
                 });
                 //업로드할 데이터를 구성한다.
+            }
             }
         };
         //스피너 선택시.

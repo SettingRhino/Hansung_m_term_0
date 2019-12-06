@@ -4,16 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Gravity;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,16 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,15 +53,13 @@ public class PostView  extends AppCompatActivity {
     protected ImageButton bt_comment_ok;
     ImageButton postremovebtn;
     ImageButton postmodifybtn;
-    private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "GoogleActivity";
-    private FirebaseAuth mAuth;
-    private GoogleSignInClient mSignInClient;
     String postnum;
     String categoryname;
     String postowner;
     String email;
     String useruid;
+    String root="";
     ArrayList<TextView>commentownerlist;
     ArrayList<LinearLayout> comment_frame_list;
     ArrayList<String> comment_content_list;
@@ -90,8 +75,8 @@ public class PostView  extends AppCompatActivity {
     ArrayList<String> comment_real_owner;
     LinearLayout.LayoutParams comment_frame_param;
     LinearLayout.LayoutParams comment_no_param;
-    ViewGroup.LayoutParams lp;
     LinearLayout.LayoutParams comment_comment_param;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +98,6 @@ public class PostView  extends AppCompatActivity {
         postowner=intent.getStringExtra("postowner");
         email=intent.getStringExtra("email");
         useruid=intent.getStringExtra("uid");
-        Toast.makeText(this,useruid,Toast.LENGTH_SHORT).show();
         comment_frame_list=new ArrayList<>();
         comment_no_list=new ArrayList<>();
         comment_content_list=new ArrayList<>();
@@ -149,13 +133,14 @@ public class PostView  extends AppCompatActivity {
         Intent intent=getIntent();
         categoryname=intent.getStringExtra("categoryname");
         postnum=intent.getStringExtra("postnum");
+        FirebaseDatabase.getInstance().getReference().child("user").orderByChild("uid").equalTo(useruid).addListenerForSingleValueEvent(isroot);
+        //관리자인지 확인
         postreq= FirebaseDatabase.getInstance().getReference().child("board").child(categoryname).getRef();
         //해당 글 띄우기
         postreq.orderByChild("postnum").equalTo(postnum).addListenerForSingleValueEvent(getpost);
         //코멘트 띄우기
         commentreq=FirebaseDatabase.getInstance().getReference().child("comment").getRef();
         commentreq.orderByChild("postnum").equalTo(postnum).addValueEventListener(getcommentlist);
-
         bt_comment_ok=findViewById(R.id.bt_comment_ok);
         bt_comment_ok.setOnClickListener(listen_comment_ok);
 
@@ -165,7 +150,12 @@ public class PostView  extends AppCompatActivity {
         @Override
         public void onClick(View v) {
            //comment push
+            tx_comment_write=findViewById(R.id.tx_comment_write);
+            if(tx_comment_write.getText().toString().equals("")){
+                Toast.makeText(getApplicationContext(),"침묵은 표현되지 않습니다.",Toast.LENGTH_SHORT).show();
+            }else{
             FirebaseDatabase.getInstance().getReference().child("user").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(pushcomment);
+            }
         }
     };
     ValueEventListener pushcomment=new ValueEventListener() {
@@ -181,8 +171,6 @@ public class PostView  extends AppCompatActivity {
                 commentuser=nick.toString();
                 commentowneruid=uid.toString();
                 useruid=uid.toString();
-
-
             }
             //게시글넘버,익명여부,작성자,시간,내용을 저장함.
             //일단 테스트 내용.익명여부만 체크
@@ -304,12 +292,23 @@ public class PostView  extends AppCompatActivity {
                 commentno.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 commentno.setLayoutParams(comment_no_param);
 
+                //코드에서 폰트 추가
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/dmo.ttf");
+                commentno.setTypeface(typeface);
+                //
+
+
                 commentcontent=new TextView(getApplicationContext());
                 commentcontent.setTextColor(Color.WHITE);
                 commentcontent.setText(commentlist.get(i).getContent());
                 commentcontent.setTextSize(15);
                 commentcontent.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 commentcontent.setLayoutParams(comment_comment_param);
+                //코드에서 폰트 추가
+                Typeface typeface2 = Typeface.createFromAsset(getAssets(), "fonts/dmo.ttf");
+                commentcontent.setTypeface(typeface2);
+                //
+
 
                 commentowner=new TextView(getApplicationContext());
                 commentowner.setTextColor(Color.WHITE);
@@ -322,6 +321,11 @@ public class PostView  extends AppCompatActivity {
                     else
                         commentowner.setText("");
                 }
+                //코드에서 폰트 추가
+                Typeface typeface3 = Typeface.createFromAsset(getAssets(), "fonts/dmo.ttf");
+                commentowner.setTypeface(typeface3);
+                //
+
                 commentowner.setTextSize(15);
                 commentowner.setGravity(Gravity.CENTER_VERTICAL|Gravity.END);
                 commentowner.setLayoutParams(comment_no_param);
@@ -380,7 +384,7 @@ public class PostView  extends AppCompatActivity {
                 useruid=snapshot.child("uid").getValue(Object.class).toString();
             }
             //삭제권한이 있는경우
-            if(useruid.equals(post.getPostowneruid())){
+            if(useruid.equals(post.getPostowneruid())||root.equals("1")){
                 //포스트 넘버랑 카테고리 이중 확인
                 TextView numtx=findViewById(R.id.tx_view_post_no);
                 Intent intent=getIntent();
@@ -426,6 +430,18 @@ public class PostView  extends AppCompatActivity {
             }
         }
 
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+    ValueEventListener isroot=new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                root=snapshot.child("root").getValue(Object.class).toString();
+            }
+        }
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -497,7 +513,7 @@ public class PostView  extends AppCompatActivity {
         public boolean onLongClick(View v) {
             for(int f=0;f<comment_frame_list.size();f++){
                 if(v.equals(comment_frame_list.get(f))){
-                    Toast.makeText(getApplicationContext(),""+comment_no_list.get(f)+""+comment_owneruid_list.get(f),Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(getApplicationContext(),""+comment_no_list.get(f)+""+comment_owneruid_list.get(f),Toast.LENGTH_SHORT).show();
                     modifycommentowneruid=comment_owneruid_list.get(f);
                     modifycommentcreattime=comment_no_list.get(f);
                     modifycommentcontent=comment_content_list.get(f);
@@ -540,7 +556,7 @@ public class PostView  extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Log.v(TAG,"삭제클릭");
                                     for (DataSnapshot snapshot2 : dataSnapshot.getChildren()) {
-                                        if(snapshot2.child("commentowneruid").getValue(Object.class).toString().equals(useruid)){
+                                        if(snapshot2.child("commentowneruid").getValue(Object.class).toString().equals(useruid)||root.equals("1")){
                                             snapshot2.getRef().setValue(null);
                                         }
                                         else{

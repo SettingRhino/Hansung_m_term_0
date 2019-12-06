@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,33 +18,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 
 import seven.hansung.nonamed.utility.Board_post;
 import seven.hansung.nonamed.utility.Spinnercreat;
@@ -89,8 +72,6 @@ public class Board_0 extends AppCompatActivity {
     TextView pagenavi;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +82,6 @@ public class Board_0 extends AppCompatActivity {
         email=intent.getStringExtra("email");
         categoryname = intent.getStringExtra("categoryname");
         categorytitle = findViewById(R.id.board_title);
-Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT).show();
         nextpagebtn=findViewById(R.id.nextpagebtn);
         next5pagebtn=findViewById(R.id.next5pagebtn);
         prepagebtn=findViewById(R.id.prepagebtn);
@@ -176,7 +156,6 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
         spinerAdapter = spinnercraet.creatAdapter(spinerAdapter, R.array.board_search_spinner, this);
         spinner.setAdapter(spinerAdapter);
         spinner.setOnItemSelectedListener(Spinner_select);
-
     }
 
     //이하 리스너 혹은 다른 함수
@@ -188,12 +167,11 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
         for (int i = 0; i < 10; i++) {
             //연습 닉네임을 이메일로
             postcontainer = findViewById(R.id.post0 + i);
-            //postcontainer.removeAllViews();
             //글번호
             postno = findViewById(R.id.postno0+i);
 
             postno.setTextSize(15);
-            postno.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            postno.setGravity(Gravity.CENTER_HORIZONTAL);
             postno.setLayoutParams(postnoparam);
             postno.setTextColor(Color.WHITE);
             //글제목
@@ -220,15 +198,9 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
                 }
 
             post_text_owner.add(postowner);
-            //
-            //컨테이너 추가부분.
-            //postcontainer.addView(postno);
-            //postcontainer.addView(posttitle);
-            //postcontainer.addView(postowner);
             postcontainer.setOnClickListener(listen_post);
 
             postnolist.add(postno);
-           // posttitlelist.add(posttitle);
             postownerlist.add(postowner);
             postcontainerlist.add(postcontainer);
         }
@@ -338,11 +310,6 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
                     startActivity(intent);
 
                     //글넘버 카테고리명
-
-
-                /*Toast.makeText(getApplicationContext(),
-                        postnolist.get(index).getText().toString() + posttitlelist.get(index).getText().toString() + postownerlist.get(index).getText().toString()
-                        , Toast.LENGTH_SHORT).show();*/
                 }
             } else
                 Toast.makeText(getApplicationContext(), "에러 타이틀 인덱스를 못 얻어옴", Toast.LENGTH_SHORT).show();
@@ -369,10 +336,6 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             searchspinner = spinner.getSelectedItem().toString();
             ((TextView)spinner.getChildAt(0)).setTextColor(Color.WHITE);
-
-          //  ((TextView)parent.getChildAt(position)).setTextColor(Color.WHITE);
-            // 테스트용
-            // Toast.makeText(getApplicationContext(),tmp_share,Toast.LENGTH_SHORT).show();
         }
 
         //스피너 설정 선택이 안되었을 때
@@ -519,20 +482,12 @@ Toast.makeText(getApplicationContext(),uid+email+categoryname,Toast.LENGTH_SHORT
                     if(snapshot.child("postowneruid").getValue(Object.class).toString().equals(uidlist.get(h))){
                         Object p_noname=snapshot.child("isnoname").getValue(Object.class);
                         if(p_noname.toString().equals("false")){
-                            /*Object p_n=snapshot.child("postnum").getValue(Object.class);
-                            Object p_t=snapshot.child("posttitle").getValue(Object.class);
-                            if(p_t==null) p_t="";
-                            if(p_n==null) p_n="";
-                            postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),"noname"));
-                        }
-                        else{*/
                             Object p_n=snapshot.child("postnum").getValue(Object.class);
                             Object p_t=snapshot.child("posttitle").getValue(Object.class);
                             Object p_o=snapshot.child("postowneruid").getValue(Object.class);
                             if(p_t==null) p_t="";
                             if(p_n==null) p_n="";
                             if(p_o==null) p_o="";
-
                             postviewlist.add(new Board_post(p_n.toString(),p_t.toString(),p_o.toString()));
                         }
                     }

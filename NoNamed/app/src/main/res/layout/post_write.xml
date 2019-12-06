@@ -24,11 +24,16 @@
             android:id="@+id/tx_write_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
             android:layout_weight="2"
             android:ems="10"
+            android:fontFamily="@font/dmo"
+            android:foregroundGravity="center_vertical"
             android:inputType="text"
-            android:text="dddddd"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="@android:color/white"
+            android:textColorLink="#FFFFFF"
+            android:textCursorDrawable="@android:color/white" />
     </LinearLayout>
 
     <LinearLayout
@@ -46,10 +51,13 @@
             android:layout_weight="1"
             android:background="@drawable/edittextboxline"
             android:ems="10"
+            android:fontFamily="@font/dmo"
             android:inputType="textMultiLine|textNoSuggestions"
             android:scrollbars="vertical"
             android:text=""
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textColorLink="@android:color/white"
+            android:textCursorDrawable="@android:color/white" />
     </LinearLayout>
 
     <LinearLayout
@@ -69,10 +77,13 @@
                 android:id="@+id/isnoname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:text=" 익명?"
                 android:textColor="#FFFFFF"
-                android:text=" 익명 " />
+                android:textColorLink="#FFFFFF"
+                android:textCursorDrawable="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -82,15 +93,17 @@
             android:gravity="top"
             android:orientation="horizontal">
 
-            <ImageButton
+            <Button
                 android:id="@+id/bt_write_ok"
                 android:layout_width="120dp"
                 android:layout_height="60dp"
-                android:layout_weight="1"
                 android:layout_marginTop="20dp"
+                android:layout_weight="1"
                 android:background="#000000"
-                android:text=""
-                app:srcCompat="@color/colorAccent"/>
+                android:fontFamily="@font/dos"
+                android:text="Confirm"
+                android:textColor="#FFFFFF"
+                android:textSize="25dp" />
         </LinearLayout>
     </LinearLayout>
 

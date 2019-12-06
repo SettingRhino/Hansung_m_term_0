@@ -38,24 +38,24 @@ public class Charcterselect extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("characterimage");
 
-        imageref=storageRef.child("character0.jpg");
+        imageref=storageRef.child("avatar0.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into((ImageView) character0);
 
-        imageref=storageRef.child("character1.jpg");
+        imageref=storageRef.child("avatarr1.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into(character1);
-        imageref=storageRef.child("character2.jpg");
+        imageref=storageRef.child("avatar2.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into(character2);
-        imageref=storageRef.child("character3.jpg");
+        imageref=storageRef.child("avatar3.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into(character3);
-        imageref=storageRef.child("character4.jpg");
+        imageref=storageRef.child("avatar4.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into(character4);
-        imageref=storageRef.child("character5.jpg");
+        imageref=storageRef.child("avatar5.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into(character5);
-        imageref=storageRef.child("character6.jpg");
+        imageref=storageRef.child("avatar6.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into(character6);
-        imageref=storageRef.child("character7.jpg");
+        imageref=storageRef.child("avatar7.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into(character7);
-        imageref=storageRef.child("character8.jpg");
+        imageref=storageRef.child("avatar8.jpg");
         Glide.with(getApplicationContext() ).load(imageref).into(character8);
 
     }

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/board_action_write"
+    <item
+        android:id="@+id/board_action_write"
+        android:icon="@drawable/btn_write2x"
         android:title="write"
-        android:icon="@drawable/writeicon"
         app:showAsAction="always" />
-    <item android:id="@+id/board_action_num_one"
+    <item
+        android:id="@+id/board_action_num_one"
+        android:icon="@drawable/btn_home_2x"
         android:title="write"
-        android:icon="@drawable/gopage1"
         app:showAsAction="always" />
 </menu>

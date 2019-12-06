@@ -17,6 +17,7 @@
             android:id="@+id/board_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/dmo"
             android:gravity="center|center_vertical"
             android:text="title"
             android:textColor="#FFFFFF"
@@ -44,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/textviewbottomsolid"
+                android:fontFamily="@font/dmo"
                 android:gravity="center"
                 android:text="번호"
                 android:textColor="#FFFFFF"
@@ -60,7 +62,8 @@
                 android:text="제목"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/dmo"/>
 
             <TextView
                 android:id="@+id/postowner"
@@ -72,7 +75,8 @@
                 android:text="글쓴이"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/dmo"/>
         </LinearLayout>
 
         <LinearLayout
@@ -89,26 +93,33 @@
 
             <TextView
                 android:id="@+id/postno0"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="" />
+                android:fontFamily="@font/dmo"
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:text="fff" />
 
             <TextView
                 android:id="@+id/posttitle0"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner0"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -121,28 +132,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/postno1"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="left"
                 android:text="" />
 
             <TextView
                 android:id="@+id/posttitle1"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner1"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -155,28 +173,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/postno2"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="left"
                 android:text="" />
 
             <TextView
                 android:id="@+id/posttitle2"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner2"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -189,28 +214,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/postno3"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="left"
                 android:text="" />
 
             <TextView
                 android:id="@+id/posttitle3"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner3"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -223,28 +255,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/postno4"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="left"
                 android:text="" />
 
             <TextView
                 android:id="@+id/posttitle4"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner4"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -257,28 +296,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/postno5"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="left"
                 android:text="" />
 
             <TextView
                 android:id="@+id/posttitle5"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner5"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -291,28 +337,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/postno6"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="left"
                 android:text="" />
 
             <TextView
                 android:id="@+id/posttitle6"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner6"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -325,28 +378,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/postno7"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="left"
                 android:text="" />
 
             <TextView
                 android:id="@+id/posttitle7"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner7"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -359,28 +419,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/postno8"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="left"
                 android:text="" />
 
             <TextView
                 android:id="@+id/posttitle8"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner8"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" />
         </LinearLayout>
         <LinearLayout
@@ -393,28 +460,35 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <TextView
-            android:id="@+id/postno9"
+                android:id="@+id/postno9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
                 android:gravity="left"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/posttitle9"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="" />
 
             <TextView
                 android:id="@+id/postowner9"
-                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:textSize="15sp"
+                android:gravity="right"
                 android:text="" /></LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -429,6 +503,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            style=""
             />
 
         <EditText
@@ -437,14 +512,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:fontFamily="@font/dmo"
             android:inputType="textPersonName"
-            android:text="" />
+            android:text=""
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:textCursorDrawable="@android:color/white" />
 
         <Button
             android:id="@+id/bt_post_search"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:text="◁" />
+            android:foreground="@drawable/btn_search" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -463,7 +542,8 @@
             android:adjustViewBounds="true"
             android:padding="0dp"
             android:scaleType="fitCenter"
-            app:srcCompat="@mipmap/toopremovepage" />
+            android:scaleX="-1"
+            app:srcCompat="@drawable/btn_right_edge" />
 
         <ImageButton
             android:id="@+id/prepagebtn"
@@ -474,13 +554,15 @@
             android:adjustViewBounds="true"
             android:padding="0dp"
             android:scaleType="fitCenter"
-            app:srcCompat="@mipmap/premovepage" />
+            android:scaleX="-1"
+            app:srcCompat="@drawable/btn_next" />
 
         <TextView
             android:id="@+id/pagenavi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/dmo"
             android:textColor="#ffffff" />
 
         <ImageButton
@@ -493,7 +575,7 @@
             android:padding="0dp"
             android:scaleType="fitCenter"
             android:textColor="#FFFFFF"
-            app:srcCompat="@mipmap/movepage" />
+            app:srcCompat="@drawable/btn_next" />
 
         <ImageButton
             android:id="@+id/next5pagebtn"
@@ -504,6 +586,6 @@
             android:adjustViewBounds="true"
             android:padding="0dp"
             android:scaleType="fitCenter"
-            app:srcCompat="@mipmap/toomovepage" />
+            app:srcCompat="@drawable/btn_right_edge" />
     </LinearLayout>
 </LinearLayout>

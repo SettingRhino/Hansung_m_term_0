@@ -1,16 +1,15 @@
 package seven.hansung.nonamed;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class BoardCategory extends AppCompatActivity {
     DatabaseReference database;
@@ -91,8 +91,15 @@ public class BoardCategory extends AppCompatActivity {
                 categorytext.setTextColor(Color.WHITE);
                 categorytext.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
                 categorytext.setLayoutParams(categoryparam);
-                categorytext.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.textviewbottomsolid));
+                //categorytext.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.textviewbottomsolid));
                 categorytext.setOnClickListener(Listen_boardcategory00);
+
+                //코드에서 폰트 추가
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/dmo.ttf");
+                categorytext.setTypeface(typeface);
+                //
+
+                categorytext.setPadding(20, 0, 20, 0);
 
                 categorymainframe.addView(categorytext);
             }

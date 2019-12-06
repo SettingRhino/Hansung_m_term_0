@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -50,6 +51,7 @@ public class WellCome extends AppCompatActivity implements View.OnClickListener 
     private static final String TAG = "GoogleActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wellcome);
         signupbtn=findViewById(R.id.signupbtn);
@@ -191,10 +193,10 @@ public class WellCome extends AppCompatActivity implements View.OnClickListener 
                     }
                     TextView v = findViewById(R.id.nickname);
                     if (overnick.equals(v.getText().toString())) {
-                        Toast.makeText(getApplicationContext(), "중복", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "중복된 닉네임이 있습니다", Toast.LENGTH_LONG).show();
                         overlapcheckflag = 0;
                     } else {
-                        Toast.makeText(getApplicationContext(), "중복X", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "회원가입 가능한 닉네임입니다.", Toast.LENGTH_LONG).show();
                         overlapcheckflag = 1;
                     }
                 }

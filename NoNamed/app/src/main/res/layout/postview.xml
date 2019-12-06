@@ -26,10 +26,10 @@
                 android:id="@+id/tx_view_post_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:layout_gravity="left"
-                android:text="no"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
@@ -39,21 +39,23 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="10"
+                android:fontFamily="@font/dmo"
                 android:gravity="center"
-                android:text="tx_view_board_name"
+                android:text="load..."
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tx_view_post_owner"
-                android:layout_width="wrap_content"
+                android:layout_width="124dp"
                 android:layout_height="match_parent"
-                android:layout_weight="7"
-                android:textSize="15sp"
-                android:gravity="center"
                 android:layout_gravity="right"
+                android:layout_weight="7"
+                android:fontFamily="@font/dmo"
+                android:gravity="center"
+                android:text="load..."
                 android:textColor="#FFFFFF"
-                android:text="owner" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -64,24 +66,22 @@
 
             <ImageButton
                 android:id="@+id/postmodifybtn"
-                android:layout_width="60dp"
+                android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="left"
-                android:layout_marginRight="10sp"
-                android:scrollbarSize="4sp"
-                android:text="수정"
+                android:layout_marginRight="10dp"
                 android:background="#000000"
-                app:srcCompat="@color/colorAccent"
-                />
+                android:foreground="@drawable/btn_edit"
+                android:scrollbarSize="4sp"
+                app:srcCompat="@color/colorAccent" />
 
             <ImageButton
                 android:id="@+id/postremovebtn"
-                android:layout_width="60dp"
+                android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="left"
-                android:text="삭제"
-                android:background="#000000"
-                app:srcCompat="@color/colorAccent"/>
+                android:foreground="@drawable/btn_remove"
+                app:srcCompat="@color/colorAccent" />
 
             <TextView
                 android:id="@+id/tx_view_post_time"
@@ -89,8 +89,9 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:layout_weight="1"
+                android:fontFamily="@font/dos"
                 android:gravity="right|center_vertical"
-                android:text="creattime"
+                android:text="load..."
                 android:textColor="#FFFFFF"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -114,8 +115,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="200"
-            android:textColor="#FFFFFF"
-            android:text="" />
+            android:fontFamily="@font/dmo"
+            android:text=""
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
     <LinearLayout
@@ -128,8 +130,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="#FFFFFF"
-            android:text="익명" />
+            android:fontFamily="@font/dmo"
+            android:text="익명?"
+            android:textColor="#FFFFFF" />
 
         <ScrollView
             android:layout_width="wrap_content"
@@ -144,21 +147,24 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittextboxline"
                 android:ems="10"
+                android:fontFamily="@font/dmo"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:lines="3"
                 android:scrollbars="vertical"
                 android:text=""
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                android:textColorHint="@android:color/white"
+                android:textColorLink="#FFFFFF"
+                android:textCursorDrawable="@android:color/white" />
         </ScrollView>
 
         <ImageButton
             android:id="@+id/bt_comment_ok"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text=""
             android:background="#000000"
-            app:srcCompat="@color/colorAccent"/>
+            android:foreground="@drawable/btn_write_little" />
     </LinearLayout>
 
     <LinearLayout
