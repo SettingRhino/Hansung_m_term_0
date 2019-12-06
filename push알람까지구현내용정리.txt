@@ -1,0 +1,23 @@
+java 파일 설명
+
+ChattingRoomSelect : 
+ - 채팅방 목록을 리스트 뷰로 가져오고 리스트뷰의 항목을 터치하여 채팅방으로 이동할 수있게 하는 코드
+ - SelectMenu에서 "채팅"버튼을 클릭하면 이 클래스로 이동하게됨
+ - 커스텀 다이얼로그 사용
+
+
+One_on_one_Chatting :
+- ChattingRoomSelect 에서 채팅방을 선택하면 이곳으로 넘어온다.
+- 일대일채팅을 구현 하였고 이미지 뷰와 상대유저의 이름을 띄우는 textView를 대충 구현 해둠
+- 채팅메세지를 보내면 푸시알람이 뜨도록 설정해둠
+
+MyFireBaseMessagingSerive , NotificationModel
+- 푸시알람을 사용하기 위해서 쓰는 부분 그냥 똑같이 복사해두면됨
+
+주의 사항
+
+manifest파일 잘 확인해야됨
+MainActivity에서 intent생성시 인자 넘기도록 수정함
+유저에 pushToken 항목을 만들어 둬야됨(회원 가입할떄 이 항목이 추가되도록)
+build.gradle(project , module) 푸시알람때문에 몇가지 추가한게 있는데 버전을 똑같이 쓰는게 좋을 듯.
+버전 달라지면 이상한 오류나 반드시 추가해야하는 코드 부분이나 지금 코드에서 다른 방식으로 뭔가를 써야하는 불상사가 생김(여기서 시간 엄청 걸렸음.....) 
