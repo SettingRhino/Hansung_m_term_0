@@ -19,6 +19,10 @@ public class Board_post {
         return postowner;
     }
 
+    public void setPostowner(String postowner) {
+        this.postowner = postowner;
+    }
+
     public Board_post(String postnum, String posttitle, String postowner) {
         if(postnum==null){
             postnum="";

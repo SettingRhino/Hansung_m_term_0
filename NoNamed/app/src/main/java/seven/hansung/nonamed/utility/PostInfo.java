@@ -6,7 +6,7 @@ public class PostInfo {
     public String creattime;
     public String isnoname;
     public String postnum;
-    public String postowner;
+    public String postowneruid;
     public String posttitle;
 
     public PostInfo() {
@@ -15,18 +15,22 @@ public class PostInfo {
         this.creattime = "";
         this.isnoname = "";
         this.postnum = "";
-        this.postowner = "";
+        this.postowneruid = "";
         this.posttitle = "";
     }
 
-    public PostInfo(String category, String content, String creattime, String isnoname, String postnum, String postowner, String posttitle) {
+    public PostInfo(String category, String content, String creattime, String isnoname, String postnum, String postowneruid, String posttitle) {
         this.category = category;
         this.content = content;
         this.creattime = creattime;
         this.isnoname = isnoname;
         this.postnum = postnum;
-        this.postowner = postowner;
+        this.postowneruid = postowneruid;
         this.posttitle = posttitle;
+    }
+
+    public String getPostowneruid() {
+        return postowneruid;
     }
 
     public String getCategoy() {
@@ -43,9 +47,6 @@ public class PostInfo {
     }
     public String getPostnum() {
         return postnum;
-    }
-    public String getPostowner() {
-        return postowner;
     }
     public String getPosttitle() {
         return posttitle;

@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "806294607879-3t0rbgmm2tdtr7gpg3kdd76du84q6olq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "seven.hansung.nonamed",
+            "certificate_hash": "5a48f10cd116c6125c262f29ef457cf69111f11b"
+          }
+        },
+        {
+          "client_id": "806294607879-b33hubjli4op4u8q8nd2qrluqi1la952.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "seven.hansung.nonamed",
+            "certificate_hash": "1c247862dc6ada93d0ee4898942261e4f5c6c2a6"
+          }
+        },
+        {
           "client_id": "806294607879-usa411kt4v5joqpq7ucpkvrqe6i2i4dn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

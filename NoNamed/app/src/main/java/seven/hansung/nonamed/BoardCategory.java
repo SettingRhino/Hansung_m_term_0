@@ -1,14 +1,15 @@
 package seven.hansung.nonamed;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class BoardCategory extends AppCompatActivity {
     DatabaseReference database;
@@ -28,14 +30,17 @@ public class BoardCategory extends AppCompatActivity {
     LinearLayout categorymainframe;
     TextView categorytext;
     ArrayList<String> categorylist;
-
+    String uid="";
+    String email="";
     String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.boardcategory);
         Intent intent=getIntent();
-        username=intent.getStringExtra("username");
+        uid=intent.getStringExtra("uid");
+        email=intent.getStringExtra("email");
         database = FirebaseDatabase.getInstance().getReference();
         mcategoryRef = database.child("category");
         //카테고리 값 가져옴 categorylist
@@ -47,7 +52,12 @@ public class BoardCategory extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
-        startActivity(new Intent(this,SelectMenu.class));
+        Intent intent=new Intent(this,SelectMenu.class);
+        //유저네임을 보내줌.X
+        intent.putExtra("uid",uid);
+        intent.putExtra("email",email);
+        //intent.putExtra("username",username);
+        startActivity(intent);
     }
     View.OnClickListener Listen_boardcategory00=new View.OnClickListener() {
         @Override
@@ -57,6 +67,8 @@ public class BoardCategory extends AppCompatActivity {
             //Toast.makeText(BoardCategory.this, categoryname, Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(BoardCategory.this,Board_0.class);
             //유저네임을 보내줌.X
+            intent.putExtra("uid",uid);
+            intent.putExtra("email",email);
             intent.putExtra("categoryname",categoryname);
             //intent.putExtra("username",username);
             startActivity(intent);
@@ -71,15 +83,23 @@ public class BoardCategory extends AppCompatActivity {
                 categorylist.add(str.toString());
             }
             categorymainframe=findViewById(R.id.categorymainframe);
-            LinearLayout.LayoutParams categoryparam=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams categoryparam=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200,1);
             for(int i=0;i<categorylist.size();i++){
                 categorytext=new TextView(getApplicationContext());
                 categorytext.setText(categorylist.get(i));
                 categorytext.setTextSize(35);
-                categorytext.setGravity(Gravity.CENTER_HORIZONTAL);
+                categorytext.setTextColor(Color.WHITE);
+                categorytext.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
                 categorytext.setLayoutParams(categoryparam);
-                categorytext.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.textviewbottomsolid));
+                //categorytext.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.textviewbottomsolid));
                 categorytext.setOnClickListener(Listen_boardcategory00);
+
+                //코드에서 폰트 추가
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/dmo.ttf");
+                categorytext.setTypeface(typeface);
+                //
+
+                categorytext.setPadding(20, 0, 20, 0);
 
                 categorymainframe.addView(categorytext);
             }

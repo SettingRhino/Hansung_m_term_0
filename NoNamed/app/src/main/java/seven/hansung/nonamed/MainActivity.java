@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference database;
     DatabaseReference userref;
     private FirebaseAuth mAuth;
-    protected Button bt_Wcome;
+    protected ImageButton bt_Wcome;
     static String email="";
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "GoogleActivity";
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //테스트용
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(well);
         }
     };
+
     @Override//4.사용자 계정을 얻어온다.
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -97,17 +101,21 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String fireemail="";
+                        String useruid="";
                         mAuth = FirebaseAuth.getInstance();
                         FirebaseUser currentUser = mAuth.getCurrentUser();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Object str=snapshot.child("email").getValue(Object.class);
+                            Object uid=snapshot.child("uid").getValue(Object.class);
                             fireemail=str.toString();
+                            useruid=uid.toString();
                         }
                         if(fireemail.equals(email)){//등록된 회원이면
                             //Toast.makeText(getApplicationContext(),"firebase조회:"+fireemail+"    현재사용자조회:"+email,Toast.LENGTH_LONG).show();
 
                             Intent intent=new Intent(MainActivity.this,SelectMenu.class);
-                            //이제는 인텐트로 username값 안넘겨줌
+                            intent.putExtra("email",email);
+                            intent.putExtra("uid",useruid);
                             //intent.putExtra("username",login_id);
                             startActivity(intent);
                         }
