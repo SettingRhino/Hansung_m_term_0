@@ -1,4 +1,12 @@
 #### EOM-TJ-  
+##### 1207_2
+##### 회원가입시 유저 데이터 내용 추가
+```java 
+	userValue.put("pushTocken", "");
+             userValue.put("avatar", "avatar0.png");
+```
+#### -EOM-TJ 
+#### EOM-TJ-  
 ##### 1207_1
 ##### master정리.[이전 파일 보관 했으니 필요하신분 말씀하세요.]
 #### -EOM-TJ 

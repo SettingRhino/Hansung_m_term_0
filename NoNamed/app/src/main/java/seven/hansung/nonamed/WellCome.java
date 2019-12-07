@@ -161,6 +161,8 @@ public class WellCome extends AppCompatActivity implements View.OnClickListener 
                 userValue.put("ownercommentnum", "-1");
                 userValue.put("chatuser", "null");
                 userValue.put("uid", user.getUid());
+                userValue.put("pushTocken", "");
+                userValue.put("avatar", "avatar0.png");
 
 
                 String key = userref.push().getKey();
