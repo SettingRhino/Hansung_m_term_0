@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">NoNamed</string>
-    <string name="board_search_spinner0">글제목</string>
-    <string name="board_search_spinner1">글번호</string>
-    <string name="board_search_spinner2">작성자</string>
-</resources>

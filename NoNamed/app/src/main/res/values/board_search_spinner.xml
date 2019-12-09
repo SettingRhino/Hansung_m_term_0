@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name = "board_search_spinner">
-        <item>글제목</item>
-        <item>글번호</item>
-        <item>작성자</item>
-    </string-array>
-</resources>
