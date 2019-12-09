@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#000000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/board_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dmo"
+            android:gravity="center|center_vertical"
+            android:text="title"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/textviewbottomsolid"
+                android:fontFamily="@font/dmo"
+                android:gravity="center"
+                android:text="번호"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/posttitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:background="@drawable/textviewbottomsolid"
+                android:gravity="center"
+                android:text="제목"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/dmo"/>
+
+            <TextView
+                android:id="@+id/postowner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/textviewbottomsolid"
+                android:gravity="center"
+                android:text="글쓴이"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/dmo"/>
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:id="@+id/post0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno0"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle0"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner0"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/post9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/postno9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="left"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/posttitle9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:fontFamily="@font/dmo"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/postowner9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:gravity="right"
+                android:text="" /></LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/board_search_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            style=""
+            />
+
+        <EditText
+            android:id="@+id/tx_post_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:fontFamily="@font/dmo"
+            android:inputType="textPersonName"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textColorLink="@android:color/white"
+            android:textCursorDrawable="@android:color/white" />
+
+        <Button
+            android:id="@+id/bt_post_search"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:foreground="@drawable/btn_search" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/pre5pagebtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:scaleType="fitCenter"
+            android:scaleX="-1"
+            app:srcCompat="@drawable/btn_right_edge" />
+
+        <ImageButton
+            android:id="@+id/prepagebtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="30dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:scaleType="fitCenter"
+            android:scaleX="-1"
+            app:srcCompat="@drawable/btn_next" />
+
+        <TextView
+            android:id="@+id/pagenavi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/dmo"
+            android:textColor="#ffffff" />
+
+        <ImageButton
+            android:id="@+id/nextpagebtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="15dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:scaleType="fitCenter"
+            android:textColor="#FFFFFF"
+            app:srcCompat="@drawable/btn_next" />
+
+        <ImageButton
+            android:id="@+id/next5pagebtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/btn_right_edge" />
+    </LinearLayout>
+</LinearLayout>

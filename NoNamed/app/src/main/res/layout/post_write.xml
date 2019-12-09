@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#000000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <Spinner
+            android:id="@+id/post_select_board"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbarSize="20dp" />
+
+        <EditText
+            android:id="@+id/tx_write_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_weight="2"
+            android:ems="10"
+            android:fontFamily="@font/dmo"
+            android:foregroundGravity="center_vertical"
+            android:inputType="text"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="@android:color/white"
+            android:textColorLink="#FFFFFF"
+            android:textCursorDrawable="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/tx_write_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/edittextboxline"
+            android:ems="10"
+            android:fontFamily="@font/dmo"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:scrollbars="vertical"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textColorLink="@android:color/white"
+            android:textCursorDrawable="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/isnoname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/dmo"
+                android:text=" 익명?"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF"
+                android:textCursorDrawable="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_write_ok"
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:fontFamily="@font/dos"
+                android:text="Confirm"
+                android:textColor="#FFFFFF"
+                android:textSize="25dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
